@@ -1,0 +1,8 @@
+{
+  "name": "inveinta",
+  "app_id": "31394151",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

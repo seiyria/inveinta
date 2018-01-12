@@ -14,3 +14,25 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.scroll-content {
+  overflow: auto;
+}
+
+.greeting-block {
+  background: linear-gradient(135deg, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #294457 100%);
+  background-size: cover;
+  text-align: center;
+  height: 160px;
+
+  .label {
+    position: relative;
+    height: 100%;
+
+    .greeting {
+      position: absolute;
+      width: 100%;
+      bottom: 50%;
+    }
+  }
+}

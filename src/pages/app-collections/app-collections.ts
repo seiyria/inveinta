@@ -34,7 +34,7 @@ export class AppCollectionsPage {
           handler: ({ name }) => {
             name = name.trim();
             if(!name) return;
-            this.firebase.createNewCollection(name, []);
+            this.firebase.createNewCollection(name, {});
           }
         }
       ]

@@ -16,8 +16,10 @@ export class FirebaseProvider {
 
   private profileDoc;
   private profile;
+  private profileSubscription: Subscription;
 
   private allCollectionsCol;
+  private allCollectionsLive;
 
   public get authState(): Observable<any> {
     return this.afAuth.authState;
@@ -40,6 +42,10 @@ export class FirebaseProvider {
     return this.profile;
   }
 
+  public get myCollections() {
+    return this.allCollectionsLive;
+  }
+
   constructor(
     private afAuth: AngularFireAuth,
     private afStore: AngularFirestore
@@ -50,6 +56,7 @@ export class FirebaseProvider {
   private init() {
     this.auth$ = this.authState.subscribe(d => {
       if(!d) {
+        this.profileSubscription.unsubscribe();
         this.authData = null;
         return;
       }
@@ -60,15 +67,18 @@ export class FirebaseProvider {
   }
 
   private initCollections() {
-    this.profileDoc = this.afStore.doc<Profile>(`user/${this.uid}`);
+    this.profileDoc = this.afStore.doc<Profile>(`users/${this.uid}`);
     this.profile = this.profileDoc.valueChanges();
 
-    this.profile.subscribe(d => {
+    this.profileSubscription = this.profile.subscribe(d => {
       if(d) return;
       this.initProfile();
     });
 
     this.allCollectionsCol = this.afStore.collection<ItemCollection>('collections');
+    this.allCollectionsLive = this.afStore.collection<ItemCollection>('collections', ref => {
+      return ref.where(`sharedWith.${this.uid}`, '==', true);
+    }).valueChanges();
   }
 
   public async createNewCollection(name: string, types: { [key: string]: string }) {
@@ -78,7 +88,7 @@ export class FirebaseProvider {
       uuid: uuid(),
       types,
       owner: this.uid,
-      items: [],
+      itemCount: 0,
       sharedWith: {
         [this.uid]: true
       }

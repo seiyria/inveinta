@@ -11,6 +11,5 @@ export class ItemCollection {
   // user uids shared with
   sharedWith: { [key: string]: boolean };
 
-  // dynamic, can't easily be modeled
-  items: any[];
+  itemCount: number;
 }

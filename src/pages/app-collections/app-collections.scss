@@ -1,3 +1,49 @@
 page-app-collections {
+  .collection-card {
+    min-height: 160px;
+    max-height: 160px;
 
+    cursor: pointer;
+
+    &.add-card {
+      color: rgba(16, 27, 64, 0.7);
+      font-size: 2rem;
+
+      ion-icon {
+        font-size: 5rem;
+      }
+
+      &:hover {
+        color: rgba(16, 27, 64, 0.9);
+      }
+    }
+
+    &:hover {
+      box-shadow: 0 2px 2px 0 rgba(16, 27, 64, 0.44),
+                  0 3px 1px -2px rgba(16, 27, 64, 0.5),
+                  0 1px 5px 5px rgba(16, 27, 64, 0.42);
+    }
+
+    ion-card-header {
+      position: relative;
+
+      .mine {
+        ion-icon {
+          position: absolute;
+          top: 0;
+          right: 3px;
+          color: #fff;
+        }
+
+        .triangle {
+          position: absolute;
+          top: 0;
+          right: -35px;
+          border-left: 35px solid transparent;
+          border-right: 35px solid transparent;
+          border-top: 35px solid map-get($colors, primary);
+        }
+      }
+    }
+  }
 }

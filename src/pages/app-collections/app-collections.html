@@ -9,5 +9,43 @@
 
 
 <ion-content padding>
-  <button ion-button color="primary" (click)="createCollection()">Add New Collection</button>
+  <ion-grid>
+    <ion-row>
+
+      <ion-col col-md-4 col-xs-12>
+        <ion-card class="collection-card add-card" (click)="createCollection()" true-center>
+          <ion-row>
+            <ion-col>
+              <ion-icon name="add"></ion-icon>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              Add New Collection
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-md-4 col-xs-12 *ngFor="let collection of firebase.myCollections | async">
+        <ion-card class="collection-card">
+          <ion-card-header>
+            <strong>{{ collection.name }}</strong>
+
+            <span class="mine" *ngIf="collection.owner === firebase.uid">
+              <div class="triangle"></div>
+              <ion-icon name="star"></ion-icon>
+            </span>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div>{{ collection.itemCount | number }} items</div>
+            <div>Created {{ collection.createdAt | date:'shortDate' }}</div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
 </ion-content>

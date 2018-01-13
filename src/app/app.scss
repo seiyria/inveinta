@@ -60,3 +60,10 @@
   justify-content: center;
   align-items: center;
 }
+
+@media screen and (min-width: 768px) {
+  .alert-wrapper {
+    min-width: 560px;
+    max-width: 560px !important;
+  }
+}

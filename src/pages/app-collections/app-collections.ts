@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, IonicPage } from 'ionic-angular';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @IonicPage({
   name: 'Collections',
@@ -11,11 +12,32 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AppCollectionsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    private alertCtrl: AlertController,
+    public firebase: FirebaseProvider
+  ) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AppCollectionsPage');
+  public createCollection() {
+    this.alertCtrl.create({
+      title: 'Create Collection',
+      subTitle: 'Give this collection a name',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'Collection Name'
+        }
+      ],
+      buttons: [
+        'Cancel',
+        {
+          text: 'Create',
+          handler: ({ name }) => {
+            name = name.trim();
+            if(!name) return;
+            this.firebase.createNewCollection(name, []);
+          }
+        }
+      ]
+    }).present();
   }
-
 }

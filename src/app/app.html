@@ -9,7 +9,7 @@
     <ion-content>
       <ion-list *ngIf="firebase.authState | async as user">
         <ion-item color="primary" class="greeting-block">
-          <div class="greeting">Hello, {{ user.displayName || user.email }}</div>
+          <div class="greeting">Hello, {{ firebase.name }}</div>
         </ion-item>
 
         <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">

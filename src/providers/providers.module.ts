@@ -13,7 +13,7 @@ import { FirebaseProvider } from './firebase/firebase';
   ],
   imports: [
     AngularFireModule.initializeApp(firebase),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
   ],
 })

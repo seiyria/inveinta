@@ -12,7 +12,7 @@
   <ion-grid>
     <ion-row>
 
-      <ion-col col-md-4 col-xs-12>
+      <ion-col col-md-4 col-sm-6 col-12>
         <ion-card class="collection-card add-card" (click)="createCollection()" true-center>
           <ion-row>
             <ion-col>
@@ -28,7 +28,7 @@
         </ion-card>
       </ion-col>
 
-      <ion-col col-md-4 col-xs-12 *ngFor="let collection of firebase.myCollections | async">
+      <ion-col col-md-4 col-sm-6 col-12 *ngFor="let collection of firebase.myCollections | async">
         <ion-card class="collection-card">
           <ion-card-header>
             <strong>{{ collection.name }}</strong>

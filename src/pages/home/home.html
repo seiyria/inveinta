@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
 
-    <button ion-button menuToggle *ngIf="afAuth.authState | async">
+    <button ion-button menuToggle *ngIf="firebase.authState | async">
       <ion-icon name="menu"></ion-icon>
     </button>
 
@@ -11,28 +11,38 @@
 
 <ion-content padding>
 
-  <div *ngIf="afAuth.authState | async as user; else showLogin">
-    <h1>Hello {{ user.displayName || user.email }}!</h1>
-    <button (click)="logout()">Logout</button>
+  <div *ngIf="firebase.authState | async as user; else showLogin" full-size true-center>
+    <ion-spinner name="crescent"></ion-spinner>
   </div>
 
   <ng-template #showLogin>
 
-    <form [formGroup]="loginInformation" (ngSubmit)="login()">
+    <ion-grid full-size>
+      <ion-row full-size>
+        <ion-col col-md-6 offset-md-3 full-size true-center>
 
-      <ion-item>
-        <ion-label stacked>Email</ion-label>
-        <ion-input type="text" formControlName="email"></ion-input>
-      </ion-item>
+          <form full-width [formGroup]="loginInformation" (ngSubmit)="login()">
 
-      <ion-item>
-        <ion-label stacked>Password</ion-label>
-        <ion-input type="password" formControlName="password"></ion-input>
-      </ion-item>
+            <ion-item class="no-padding-left">
+              <ion-label stacked>Email</ion-label>
+              <ion-input type="text" formControlName="email"></ion-input>
+            </ion-item>
 
-      <button margin-top ion-button block (click)="login()" [disabled]="!loginInformation.valid">Login with Email</button>
-    </form>
+            <ion-item class="no-padding-left">
+              <ion-label stacked>Password</ion-label>
+              <ion-input type="password" formControlName="password"></ion-input>
+            </ion-item>
 
+            <ion-item color="danger" *ngIf="errorMessage" margin-top padding-left>
+              {{ errorMessage }}
+            </ion-item>
+
+            <button margin-top ion-button block (click)="login()" [disabled]="!loginInformation.valid">Login with Email</button>
+          </form>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ng-template>
 
 </ion-content>

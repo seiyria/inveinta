@@ -1,4 +1,4 @@
-<ion-split-pane when="lg" [enabled]="afAuth.authState | async">
+<ion-split-pane when="lg" [enabled]="firebase.authState | async">
   <ion-menu [content]="content" swipeEnabled="false">
     <ion-header>
       <ion-toolbar color="primary">
@@ -7,14 +7,16 @@
     </ion-header>
 
     <ion-content>
-      <ion-list *ngIf="afAuth.authState | async as user">
+      <ion-list *ngIf="firebase.authState | async as user">
         <ion-item color="primary" class="greeting-block">
           <div class="greeting">Hello, {{ user.displayName || user.email }}</div>
         </ion-item>
 
         <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-          {{p.title}}
+          {{ p.title }}
         </button>
+
+        <button ion-item (click)="logout()">Logout</button>
 
       </ion-list>
     </ion-content>

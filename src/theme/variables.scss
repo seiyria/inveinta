@@ -46,13 +46,15 @@ $colors: (
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
-
+$spinner-ios-crescent-color: map-get($colors, primary);
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
+
+$spinner-md-crescent-color: map-get($colors, primary);
 
 
 

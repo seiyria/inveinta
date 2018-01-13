@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { AlertController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { FirebaseProvider } from '../providers/firebase/firebase';
 
 @Component({
   templateUrl: 'app.html'
@@ -15,20 +14,21 @@ export class MyApp {
 
   rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: string}>;
 
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    public afAuth: AngularFireAuth
+    private alertCtrl: AlertController,
+    public firebase: FirebaseProvider
   ) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'Home', component: 'Home' },
+      { title: 'Collections', component: 'Collections' }
     ];
 
   }
@@ -46,5 +46,22 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      title: 'Log out',
+      subTitle: 'Are you sure you want to log out?',
+      buttons: [
+        'No, stay logged in',
+        {
+          text: 'Yes, log out',
+          handler: () => {
+            this.firebase.auth.signOut();
+            this.nav.setRoot(HomePage);
+          }
+        }
+      ]
+    }).present();
   }
 }

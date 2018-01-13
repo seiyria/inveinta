@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
   private loginInformation: FormGroup;
+  public errorMessage: string;
+
+  private auth$: Subscription;
 
   constructor(
     public navCtrl: NavController,
     private formBuilder: FormBuilder,
-    public afAuth: AngularFireAuth
+    public firebase: FirebaseProvider
   ) {}
 
   ngOnInit() {
@@ -23,13 +27,24 @@ export class HomePage implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
+
+    // if we're signed in at any point, load the app home page
+    this.auth$ = this.firebase.authState.subscribe(data => {
+      if(!data) return;
+      this.loadAppHomePage();
+    });
+  }
+
+  ngOnDestroy() {
+    this.auth$.unsubscribe();
   }
 
   async login() {
     const { email, password } = this.loginInformation.value;
+    this.errorMessage = '';
 
     try {
-      await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+      await this.firebase.auth.signInWithEmailAndPassword(email, password);
 
     } catch(e) {
       console.error('sign-in', e);
@@ -37,17 +52,19 @@ export class HomePage implements OnInit {
       // register account if it does not exist
       if(e.code === 'auth/user-not-found') {
         try {
-          await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+          await this.firebase.auth.createUserWithEmailAndPassword(email, password);
         } catch(e) {
           console.error('create-user', e);
         }
+      } else {
+        this.errorMessage = e.message;
       }
     }
 
   }
 
-  logout() {
-    this.afAuth.auth.signOut();
+  private loadAppHomePage() {
+    this.navCtrl.setRoot('Home');
   }
 
 }

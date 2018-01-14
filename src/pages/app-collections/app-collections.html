@@ -29,7 +29,7 @@
       </ion-col>
 
       <ion-col col-md-4 col-sm-6 col-12 *ngFor="let collection of firebase.myCollections | async">
-        <ion-card class="collection-card">
+        <ion-card class="collection-card" (click)="loadCollection(collection.uuid)">
           <ion-card-header>
             <strong>{{ collection.name }}</strong>
 

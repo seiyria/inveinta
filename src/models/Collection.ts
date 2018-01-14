@@ -13,3 +13,8 @@ export class ItemCollection {
 
   itemCount: number;
 }
+
+export class Item {
+  collectionUUID: string;
+  name: string;
+}

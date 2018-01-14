@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Profile } from '../../models/Profile';
-import { ItemCollection } from '../../models/Collection';
+import { Item, ItemCollection } from '../../models/Collection';
 
 import * as uuid from 'uuid/v4';
 
@@ -20,6 +20,11 @@ export class FirebaseProvider {
 
   private allCollectionsCol;
   private allCollectionsLive;
+
+  private curCollectionLive;
+
+  private curItemsCol;
+  private curItemsLive;
 
   public get authState(): Observable<any> {
     return this.afAuth.authState;
@@ -42,8 +47,16 @@ export class FirebaseProvider {
     return this.profile;
   }
 
-  public get myCollections() {
+  public get myCollections(): Observable<ItemCollection[]> {
     return this.allCollectionsLive;
+  }
+
+  public get currentCollection() {
+    return this.curCollectionLive;
+  }
+
+  public get currentCollectionItems(): Observable<Item[]> {
+    return this.curItemsLive;
   }
 
   constructor(
@@ -100,6 +113,25 @@ export class FirebaseProvider {
 
   private async initProfile(): Promise<any> {
     return this.profileDoc.set({});
+  }
+
+  public async loadCollectionItems(uuid: string) {
+
+    this.curCollectionLive = this.afStore.collection<ItemCollection>('collections', ref => {
+      return ref
+        .where('uuid', '==', uuid)
+        .limit(1);
+    }).valueChanges();
+
+    this.curItemsCol = this.afStore.collection<Item>('items');
+    this.curItemsLive = this.afStore.collection<Item>('items', ref => {
+      return ref.where('collectionUUID', '==', uuid);
+    }).valueChanges();
+
+  }
+
+  public addCollectionItem(item: Item) {
+    this.curItemsCol.add(item);
   }
 
 }

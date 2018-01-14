@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage } from 'ionic-angular';
+import { AlertController, IonicPage, NavController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @IonicPage({
@@ -13,6 +13,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 export class AppCollectionsPage {
 
   constructor(
+    private navCtrl: NavController,
     private alertCtrl: AlertController,
     public firebase: FirebaseProvider
   ) {}
@@ -39,5 +40,11 @@ export class AppCollectionsPage {
         }
       ]
     }).present();
+  }
+
+  public loadCollection(uuid: string) {
+    this.navCtrl.push('CollectionsDetail', {
+      uuid
+    });
   }
 }

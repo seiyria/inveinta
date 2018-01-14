@@ -1,0 +1,12 @@
+
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title *ngIf="!(firebase.currentCollection | async)">Loading...</ion-title>
+    <ion-title *ngIf="firebase.currentCollection | async as coll">Collection: {{ coll[0].name }} ({{ coll[0].itemCount | number }} items)</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+</ion-content>

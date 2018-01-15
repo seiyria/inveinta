@@ -41,6 +41,7 @@ export class FirebaseProvider {
   }
 
   public get uid(): string {
+    if(!this.authData) return '';
     return this.authData.uid;
   }
 

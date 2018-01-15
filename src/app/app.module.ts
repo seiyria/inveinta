@@ -11,11 +11,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { ProvidersModule } from '../providers/providers.module';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { AddItemModal } from '../pages/app-collections-detail/additem.modal';
+import { ModifyCollectionPopover } from '../pages/app-collections-detail/modifycollection.popover';
+import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.popover';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+
+    AddItemModal,
+    ModifyCollectionPopover,
+    ModifyItemPopover
   ],
   imports: [
     BrowserModule,
@@ -26,7 +33,11 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+
+    AddItemModal,
+    ModifyCollectionPopover,
+    ModifyItemPopover
   ],
   providers: [
     StatusBar,

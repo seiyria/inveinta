@@ -71,6 +71,7 @@ $spinner-md-crescent-color: map-get($colors, primary);
 // so that the above variables are used and Ionic's
 // default are overridden.
 
+@import "./datatable.material.scss";
 @import "ionic.theme.default";
 
 

@@ -3,10 +3,85 @@
 
   <ion-navbar color="primary">
     <ion-title *ngIf="!(firebase.currentCollection | async)">Loading...</ion-title>
-    <ion-title *ngIf="firebase.currentCollection | async as coll">Collection: {{ coll[0].name }} ({{ coll[0].itemCount | number }} items)</ion-title>
+    <ion-title *ngIf="firebase.currentCollection | async as coll">
+      <span *ngIf="hasTypes(coll)">{{ coll.name }} ({{ coll.itemCount | number }} items)</span>
+      <span *ngIf="!hasTypes(coll)">{{ coll.name }} Setup</span>
+    </ion-title>
+
+    <ion-buttons end *ngIf="firebase.currentCollection | async as coll">
+      <button color="light" ion-button icon-only *ngIf="hasTypes(coll) && !forceEditTypes" (click)="editCollMenu($event, coll)"><ion-icon name="more"></ion-icon></button>
+      <button color="light" outline ion-button icon-right *ngIf="(!hasTypes(coll) || forceEditTypes) && hasSelectedTypes" (click)="addTypesToCollection(coll)">
+        Continue
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
+
 <ion-content padding>
+  <div *ngIf="firebase.currentCollection | async as coll; else showLoading">
+
+    <div *ngIf="!hasTypes(coll) || forceEditTypes">
+      <h1 text-center>Choose mixins for your list</h1>
+      <h6 text-center><em>(You can change this later)</em></h6>
+
+      <ion-row>
+        <ion-col>
+          <ion-searchbar
+            [(ngModel)]="typeSearchQuery"
+            showCancelButton="true"
+            placeholder="Search for the perfect mixins">
+          </ion-searchbar>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+
+        <ion-col col-md-4 col-sm-6 col-12 *ngFor="let type of types | typeSearchFilter:typeSearchQuery">
+          <ion-card class="type-card" (click)="selectType(type.id)">
+            <ion-card-header>
+              <strong>{{ type.name }}</strong>
+
+              <span class="selected" *ngIf="selectedTypes[type.id]">
+                <div class="triangle"></div>
+                <ion-icon name="checkmark"></ion-icon>
+              </span>
+            </ion-card-header>
+
+            <ion-card-content>
+              <div>{{ type.desc }}</div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+      </ion-row>
+    </div>
+
+    <ngx-datatable
+      *ngIf="hasTypes(coll) && !forceEditTypes"
+      class="material striped"
+      [rows]="allItems"
+      [columns]="columns"
+      [limit]="20"
+      columnMode="force"
+      [cssClasses]="ngxDataTableIcons"
+      rowHeight="auto"
+      headerHeight="35"
+      footerHeight="50"
+      [scrollbarH]="true"
+      [sorts]="[{prop: 'name', dir: 'asc'}]"
+      (tableContextmenu)="onTableContextMenu($event, coll)"
+    ></ngx-datatable>
+
+    <ion-fab bottom right *ngIf="hasTypes(coll)">
+      <button ion-fab icon-only (click)="addNewItem(coll)"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
+  </div>
+
+  <ng-template #showLoading>
+    <div class="blank-slate">Loading...</div>
+  </ng-template>
 </ion-content>

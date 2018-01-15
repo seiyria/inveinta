@@ -21,6 +21,7 @@ export class FirebaseProvider {
   private allCollectionsCol;
   private allCollectionsLive;
 
+  private curCollectionDoc;
   private curCollectionLive;
 
   private curItemsCol;
@@ -94,9 +95,10 @@ export class FirebaseProvider {
     }).valueChanges();
   }
 
-  public async createNewCollection(name: string, types: { [key: string]: string }) {
+  public async createNewCollection(name: string, types: { [key: string]: boolean }) {
     const collection: ItemCollection = {
       name,
+      id: this.afStore.createId(),
       createdAt: Date.now(),
       uuid: uuid(),
       types,
@@ -108,30 +110,103 @@ export class FirebaseProvider {
     };
 
     this.profileDoc.update({ [`collections.${collection.uuid}`]: true });
-    this.allCollectionsCol.add(collection);
+    this.allCollectionsCol.doc(collection.id).set(collection);
   }
 
   private async initProfile(): Promise<any> {
     return this.profileDoc.set({});
   }
 
-  public async loadCollectionItems(uuid: string) {
+  public async loadCollectionItems(uuid: string): Promise<any> {
 
-    this.curCollectionLive = this.afStore.collection<ItemCollection>('collections', ref => {
-      return ref
-        .where('uuid', '==', uuid)
-        .limit(1);
-    }).valueChanges();
+    return new Promise((resolve, reject) => {
 
-    this.curItemsCol = this.afStore.collection<Item>('items');
-    this.curItemsLive = this.afStore.collection<Item>('items', ref => {
-      return ref.where('collectionUUID', '==', uuid);
-    }).valueChanges();
+      this.curItemsCol = this.afStore.collection<Item>('items');
+      this.curItemsLive = this.afStore.collection<Item>('items', ref => {
+        return ref.where('collectionUUID', '==', uuid);
+      }).valueChanges();
+
+      const curCollectionCol = this.afStore.collection<ItemCollection>('collections', ref => {
+        return ref
+          .where('uuid', '==', uuid)
+          .limit(1);
+      });
+
+      const curCollectionLive = curCollectionCol.snapshotChanges();
+      const sub = curCollectionLive.subscribe(data => {
+        if(!data.length) return reject(new Error('No collections match that id'));
+        const myDocId = data[0].payload.doc.id;
+        if(!myDocId) return reject(new Error('No collections have that specific id'));
+
+        this.curCollectionDoc = this.afStore.doc<ItemCollection>(`collections/${myDocId}`);
+        this.curCollectionLive = this.curCollectionDoc.valueChanges();
+        resolve();
+        sub.unsubscribe();
+      });
+    });
 
   }
 
+  public updateCollection(coll: ItemCollection) {
+    this.curCollectionDoc.update(coll);
+  }
+
+  private async deleteCollection(db, collectionRef, batchSize) {
+    const query = collectionRef.limit(batchSize);
+
+    return new Promise((resolve, reject) => {
+      this.deleteQueryBatch(db, query, batchSize, resolve, reject);
+    });
+  }
+
+  private deleteQueryBatch(db, query, batchSize, resolve, reject) {
+    query.get()
+      .then((snapshot) => {
+
+        if(snapshot.size === 0) {
+          return 0;
+        }
+
+        const batch = db.batch();
+        snapshot.docs.forEach((doc) => {
+          batch.delete(doc.ref);
+        });
+
+        return batch.commit().then(() => {
+          return snapshot.size;
+        });
+
+      })
+
+      .then((numDeleted) => {
+        if(numDeleted < batchSize) {
+          resolve();
+          return;
+        }
+
+        this.deleteQueryBatch(db, query, batchSize, resolve, reject);
+      })
+
+      .catch(reject);
+  }
+
+  public async removeCollection(coll: ItemCollection): Promise<any> {
+    await this.deleteCollection(this.afStore.firestore, this.curItemsCol.query, 50);
+    await this.curCollectionDoc.delete();
+  }
+
   public addCollectionItem(item: Item) {
-    this.curItemsCol.add(item);
+    if(!item.collectionUUID) return;
+    item.id = this.afStore.createId();
+    this.curItemsCol.doc(item.id).set(item);
+  }
+
+  public updateCollectionItem(item: Item) {
+    this.curItemsCol.doc(item.id).update(item);
+  }
+
+  public removeCollectionItem(item: Item) {
+    this.curItemsCol.doc(item.id).delete();
   }
 
 }

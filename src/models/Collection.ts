@@ -1,12 +1,17 @@
 
 export class ItemCollection {
+
+  // the firebase id representing this collection
+  id: string;
   name: string;
+
+  // the uuid representing this collection
   uuid: string;
   createdAt: number;
   owner: string;
 
   // collection types
-  types: { [key: string]: string };
+  types: { [key: string]: boolean };
 
   // user uids shared with
   sharedWith: { [key: string]: boolean };
@@ -15,6 +20,10 @@ export class ItemCollection {
 }
 
 export class Item {
+  // the angularfire id
+  id: string;
+
+  // the collection id
   collectionUUID: string;
   name: string;
 }

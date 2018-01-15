@@ -18,6 +18,10 @@
   overflow: auto;
 }
 
+.back-button {
+  color: map-get($colors, light) !important;
+}
+
 .greeting-block {
   background: linear-gradient(135deg, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #294457 100%);
   background-size: cover;
@@ -27,6 +31,7 @@
   .label {
     position: relative;
     height: 100%;
+    font-size: 2rem;
 
     .greeting {
       position: absolute;
@@ -54,11 +59,18 @@
   height: 100%;
 }
 
-[true-center] {
+[true-center], .blank-slate {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.blank-slate {
+  width: 100%;
+  height: 100%;
+  font-size: 5rem;
+  color: #ccc;
 }
 
 @media screen and (min-width: 768px) {

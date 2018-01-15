@@ -29,11 +29,13 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   private coll$: Subscription;
   private items$: Subscription;
-  public allItems: Item[] = [];
+  private allItems: Item[] = [];
+  public visibleItems: Item[] = [];
 
   public forceEditTypes: boolean;
   public selectedTypes: any = {};
   public typeSearchQuery = '';
+  public itemFilterQuery = '';
 
   public get ngxDataTableIcons() {
     return {
@@ -73,12 +75,25 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
     this.items$ = this.firebase.currentCollectionItems.subscribe(data => {
       this.allItems = data;
+      this.updateItemFilter();
     });
   }
 
   ngOnDestroy() {
     this.coll$.unsubscribe();
     this.items$.unsubscribe();
+  }
+
+  public updateItemFilter() {
+    if(!this.itemFilterQuery) {
+      this.visibleItems = this.allItems;
+      return;
+    }
+
+    this.visibleItems = this.allItems.filter(item => {
+      if(!item.name) return false;
+      return item.name.toLowerCase().includes(this.itemFilterQuery.toLowerCase());
+    });
   }
 
   private updateCollectionTypeColumns(coll: ItemCollection) {

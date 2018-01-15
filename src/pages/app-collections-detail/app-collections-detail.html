@@ -59,21 +59,32 @@
       </ion-row>
     </div>
 
-    <ngx-datatable
-      *ngIf="hasTypes(coll) && !forceEditTypes"
-      class="material striped"
-      [rows]="allItems"
-      [columns]="columns"
-      [limit]="20"
-      columnMode="force"
-      [cssClasses]="ngxDataTableIcons"
-      rowHeight="auto"
-      headerHeight="35"
-      footerHeight="50"
-      [scrollbarH]="true"
-      [sorts]="[{prop: 'name', dir: 'asc'}]"
-      (tableContextmenu)="onTableContextMenu($event, coll)"
-    ></ngx-datatable>
+    <div *ngIf="hasTypes(coll) && !forceEditTypes">
+
+      <ion-searchbar
+        [(ngModel)]="itemFilterQuery"
+        showCancelButton="true"
+        (ionCancel)="updateItemFilter()"
+        (ionClear)="updateItemFilter()"
+        (ionInput)="updateItemFilter()"
+        placeholder="Search for items">
+      </ion-searchbar>
+
+      <ngx-datatable
+        class="material striped"
+        [rows]="visibleItems"
+        [columns]="columns"
+        [limit]="20"
+        columnMode="force"
+        [cssClasses]="ngxDataTableIcons"
+        rowHeight="auto"
+        headerHeight="35"
+        footerHeight="50"
+        [scrollbarH]="true"
+        [sorts]="[{prop: 'name', dir: 'asc'}]"
+        (tableContextmenu)="onTableContextMenu($event, coll)"
+      ></ngx-datatable>
+    </div>
 
     <ion-fab bottom right *ngIf="hasTypes(coll)">
       <button ion-fab icon-only (click)="addNewItem(coll)"><ion-icon name="add"></ion-icon></button>

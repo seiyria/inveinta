@@ -1,8 +1,8 @@
 {
   "name": "inveinta",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "author": "Inveinta Team",
+  "homepage": "http://inveinta.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -42,5 +42,5 @@
     "ionic": "^3.19.0",
     "typescript": "2.4.2"
   },
-  "description": "An Ionic project"
+  "description": "An inventory management app"
 }

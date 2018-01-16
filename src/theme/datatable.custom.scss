@@ -3,11 +3,6 @@
 
   margin: 8px;
 
-  // clickable cells are the only spots that are clickable
-  datatable-row-wrapper {
-    pointer-events: none;
-  }
-
   i, span.sort-btn {
     font-family: Ionicons;
     font-weight: normal;
@@ -39,7 +34,7 @@
     content: "No";
   }
 
-  [title*="BGG"] {
+  [title*="BGG Search"], [title*="HLTB Search"], [title*="GameFAQs Search"], [title*="Metacritic Search"] {
     pointer-events: auto;
     color: map-get($colors, primary);
     cursor: pointer;

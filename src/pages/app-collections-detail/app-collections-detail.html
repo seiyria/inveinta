@@ -82,7 +82,7 @@
         footerHeight="50"
         [scrollbarH]="true"
         [sorts]="[{prop: 'name', dir: 'asc'}]"
-        (activate)="clickRow($event)"
+        (activate)="clickCell($event)"
         (tableContextmenu)="onTableContextMenu($event, coll)"
       ></ngx-datatable>
     </div>

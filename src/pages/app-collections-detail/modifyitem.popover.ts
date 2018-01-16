@@ -7,6 +7,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 @Component({
   template: `
     <ion-list>
+      <ion-list-header>Actions</ion-list-header>
       <button ion-item (click)="edit()">Edit</button>
       <button ion-item color="danger" (click)="removeItem()">Remove</button>
     </ion-list>

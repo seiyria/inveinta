@@ -7,7 +7,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Subscription } from 'rxjs/Subscription';
 import { Item, ItemCollection } from '../../models/Collection';
 import { AddItemModal } from './additem.modal';
-import { BGG_ATTR, CollectionTypes } from '../../models/CollectionTypes';
+import { CollectionTypes } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 import { ModifyCollectionPopover } from './modifycollection.popover';
@@ -73,8 +73,11 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
       this.updateCollectionTypeColumns(coll);
     });
 
+    const syncAttributes = _.once(() => this.syncComputedAttributes());
+
     this.items$ = this.firebase.currentCollectionItems.subscribe(data => {
       this.allItems = data;
+      syncAttributes();
       this.updateItemFilter();
     });
   }
@@ -82,6 +85,18 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.coll$.unsubscribe();
     this.items$.unsubscribe();
+  }
+
+  private syncComputedAttributes() {
+
+    // TODO run this in the background
+    this.allItems.forEach(item => {
+      this.columns.forEach(col => {
+        if(!col.compute) return;
+
+        item[col.prop] = col.computeDisplay(item);
+      });
+    });
   }
 
   public updateItemFilter() {
@@ -199,12 +214,10 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     });
   }
 
-  public clickRow({ type, row }) {
-    if(type !== 'click') return;
-    
-    if(row.bggLink) {
-      window.open(BGG_ATTR.compute(row), '_blank');
-    }
+  public clickCell({ type, column, row }) {
+    if(type !== 'click' || !column.compute) return;
+
+    window.open(column.compute(row), '_blank');
   }
 
 }

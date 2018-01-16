@@ -4,6 +4,8 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { ItemCollection } from '../../models/Collection';
 import { CollectionTypesHash } from '../../models/CollectionTypes';
 
+import * as _ from 'lodash';
+
 @IonicPage({
   name: 'Collections',
   segment: 'collections'
@@ -57,7 +59,9 @@ export class AppCollectionsPage {
 
   public collectionTypes(coll: ItemCollection): string[] {
 
-    return Object.keys(coll.types).map(id => CollectionTypesHash[id].name);
+    return _.compact(Object.keys(coll.types)
+      .map(id => CollectionTypesHash[id] ? CollectionTypesHash[id].name : null)
+    );
   }
 
   public loadCollection(uuid: string) {

@@ -64,7 +64,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private loadAppHomePage() {
-    this.navCtrl.setRoot('Home');
+    this.navCtrl.setRoot('Collections');
   }
 
 }

@@ -23,6 +23,10 @@ export class AppCollectionsPage {
     public firebase: FirebaseProvider
   ) {}
 
+  ionViewWillEnter() {
+    this.firebase.doAuthCheck();
+  }
+
   public createCollection() {
     this.alertCtrl.create({
       title: 'Create Collection',

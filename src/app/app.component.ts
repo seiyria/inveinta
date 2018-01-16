@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Nav, Platform } from 'ionic-angular';
+import { AlertController, Events, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -21,6 +21,7 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     private alertCtrl: AlertController,
+    private events: Events,
     public firebase: FirebaseProvider
   ) {
     this.initializeApp();
@@ -40,12 +41,21 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+
+    this.events.subscribe('you-cant-be-here', () => {
+      this.nav.setRoot(HomePage);
+    });
   }
 
-  openPage(page) {
+  async openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+
+    try {
+      await this.nav.setRoot(page.component);
+    } catch(e) {
+      this.nav.setRoot(HomePage);
+    }
   }
 
   logout() {

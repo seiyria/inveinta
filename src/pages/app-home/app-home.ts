@@ -12,4 +12,8 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 })
 export class AppHomePage {
   constructor(public firebase: FirebaseProvider) {}
+
+  ionViewWillEnter() {
+    this.firebase.doAuthCheck();
+  }
 }

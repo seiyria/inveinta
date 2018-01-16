@@ -64,9 +64,19 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     public firebase: FirebaseProvider
   ) {}
 
+  ionViewWillEnter() {
+    this.firebase.doAuthCheck();
+  }
+
   async ngOnInit() {
     this.uuid = this.navParams.get('uuid');
-    await this.firebase.loadCollectionItems(this.uuid);
+
+    try {
+      await this.firebase.loadCollectionItems(this.uuid);
+    } catch(e) {
+      this.firebase.forceGoHome();
+      return;
+    }
 
     this.coll$ = this.firebase.currentCollection.subscribe(coll => {
       if(!coll) return;
@@ -83,8 +93,8 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.coll$.unsubscribe();
-    this.items$.unsubscribe();
+    if(this.coll$) this.coll$.unsubscribe();
+    if(this.items$) this.items$.unsubscribe();
   }
 
   private syncComputedAttributes() {

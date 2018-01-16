@@ -7,6 +7,7 @@ import { Profile } from '../../models/Profile';
 import { Item, ItemCollection } from '../../models/Collection';
 
 import * as uuid from 'uuid/v4';
+import { Events } from 'ionic-angular';
 
 @Injectable()
 export class FirebaseProvider {
@@ -45,6 +46,10 @@ export class FirebaseProvider {
     return this.authData.uid;
   }
 
+  public get isAuthenticated(): boolean {
+    return !!this.uid;
+  }
+
   public get myProfile() {
     return this.profile;
   }
@@ -63,9 +68,19 @@ export class FirebaseProvider {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afStore: AngularFirestore
+    private afStore: AngularFirestore,
+    private events: Events
   ) {
     this.init();
+  }
+
+  public doAuthCheck() {
+    if(this.isAuthenticated) return;
+    this.forceGoHome();
+  }
+
+  public forceGoHome() {
+    this.events.publish('you-cant-be-here');
   }
 
   private init() {

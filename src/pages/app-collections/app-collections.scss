@@ -5,9 +5,15 @@ page-app-collections {
 
     cursor: pointer;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
     &.add-card {
       color: rgba(16, 27, 64, 0.6);
       font-size: 2rem;
+
+      justify-content: center;
 
       ion-icon {
         font-size: 5rem;
@@ -43,6 +49,17 @@ page-app-collections {
           border-right: 35px solid transparent;
           border-top: 35px solid map-get($colors, primary);
         }
+      }
+    }
+
+    .tags-row {
+      overflow: hidden;
+
+      min-height: 32px;
+      max-height: 32px;
+
+      ion-badge {
+        margin: 3px;
       }
     }
   }

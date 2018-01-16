@@ -8,7 +8,7 @@
 
     <ion-content>
       <ion-list *ngIf="firebase.authState | async as user">
-        <ion-item color="primary" class="greeting-block">
+        <ion-item text-wrap color="primary" class="greeting-block">
           <div class="greeting">Hello, {{ firebase.name }}</div>
         </ion-item>
 

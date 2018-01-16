@@ -37,7 +37,7 @@ export const CollectionTypes: CollectionType[] = [
     ]
   },
   {
-    name: 'Board Game',
+    name: 'Board Games',
     id: 'BOARDGAME',
     desc: 'A mixin specifically for board games. Adds BGG search links to your items.',
     props: [
@@ -63,3 +63,8 @@ export const CollectionTypes: CollectionType[] = [
     ]
   }
 ];
+
+export const CollectionTypesHash: { [key: string]: CollectionType } = CollectionTypes.reduce((prev, cur) => {
+  prev[cur.id] = cur;
+  return prev;
+}, {});

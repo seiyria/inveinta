@@ -46,6 +46,12 @@
             <div>{{ collection.itemCount | number }} items</div>
             <div>Created {{ collection.createdAt | date:'shortDate' }}</div>
           </ion-card-content>
+
+          <ion-row class="tags-row">
+            <ion-col>
+              <ion-badge color="secondary" *ngFor="let type of collectionTypes(collection)">{{ type }}</ion-badge>
+            </ion-col>
+          </ion-row>
         </ion-card>
       </ion-col>
 

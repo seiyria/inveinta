@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AlertController, IonicPage, LoadingController, NavController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { ItemCollection } from '../../models/Collection';
+import { CollectionTypesHash } from '../../models/CollectionTypes';
 
 @IonicPage({
   name: 'Collections',
@@ -51,6 +53,11 @@ export class AppCollectionsPage {
         }
       ]
     }).present();
+  }
+
+  public collectionTypes(coll: ItemCollection): string[] {
+
+    return Object.keys(coll.types).map(id => CollectionTypesHash[id].name);
   }
 
   public loadCollection(uuid: string) {

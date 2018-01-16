@@ -32,11 +32,16 @@
     position: relative;
     height: 100%;
     font-size: 2rem;
+    letter-spacing: 0.5px;
 
     .greeting {
       position: absolute;
       width: 100%;
-      bottom: 50%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      word-break: break-all;
     }
   }
 }
@@ -78,4 +83,8 @@
     min-width: 560px;
     max-width: 560px !important;
   }
+}
+
+h1, h2, h3, h4, h5, h6, ion-card-header > strong {
+  letter-spacing: 1px;
 }

@@ -6,6 +6,9 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>My Collections</ion-title>
+    <ion-buttons end>
+      <button class="copy-button" [attr.data-clipboard-text]="firebase.uid" color="light" ion-button>Copy Share ID</button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

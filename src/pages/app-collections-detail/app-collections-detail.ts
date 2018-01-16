@@ -79,7 +79,12 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     }
 
     this.coll$ = this.firebase.currentCollection.subscribe(coll => {
-      if(!coll) return;
+
+      if(!coll || !coll.sharedWith[this.firebase.uid]) {
+        this.firebase.forceGoHome();
+        return;
+      }
+
       this.updateCollectionTypeColumns(coll);
     });
 

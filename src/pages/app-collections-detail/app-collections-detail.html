@@ -9,7 +9,7 @@
     </ion-title>
 
     <ion-buttons end *ngIf="firebase.currentCollection | async as coll">
-      <button color="light" ion-button icon-only *ngIf="hasTypes(coll) && !forceEditTypes" (click)="editCollMenu($event, coll)"><ion-icon name="more"></ion-icon></button>
+      <button color="light" ion-button icon-only *ngIf="hasTypes(coll) && !forceEditTypes && firebase.uid === coll.owner" (click)="editCollMenu($event, coll)"><ion-icon name="more"></ion-icon></button>
       <button color="light" outline ion-button icon-right *ngIf="(!hasTypes(coll) || forceEditTypes) && hasSelectedTypes" (click)="addTypesToCollection(coll)">
         Continue
         <ion-icon name="arrow-forward"></ion-icon>

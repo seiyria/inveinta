@@ -14,6 +14,8 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
 import { AddItemModal } from '../pages/app-collections-detail/additem.modal';
 import { ModifyCollectionPopover } from '../pages/app-collections-detail/modifycollection.popover';
 import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.popover';
+import { ShareCollectionModal } from '../pages/app-collections-detail/sharing.modal';
+import { NotifierProvider } from '../providers/notifier/notifier';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.po
     HomePage,
 
     AddItemModal,
+    ShareCollectionModal,
     ModifyCollectionPopover,
     ModifyItemPopover
   ],
@@ -36,6 +39,7 @@ import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.po
     HomePage,
 
     AddItemModal,
+    ShareCollectionModal,
     ModifyCollectionPopover,
     ModifyItemPopover
   ],
@@ -43,7 +47,8 @@ import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.po
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FirebaseProvider
+    FirebaseProvider,
+    NotifierProvider
   ]
 })
 export class AppModule {}

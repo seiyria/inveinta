@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, NavParams, ViewController } from 'ionic-angular';
+import { AlertController, LoadingController, ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ItemCollection } from '../../models/Collection';
 import { Attr } from '../../models/CollectionTypes';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { ShareCollectionModal } from './sharing.modal';
 
 @Component({
   template: `
@@ -10,6 +11,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
       <ion-list-header>Actions</ion-list-header>
       <button ion-item (click)="editName()">Change Name</button>
       <button ion-item (click)="editTypes()">Change Mixins</button>
+      <button ion-item (click)="openShare()">Share Collection</button>
       <button ion-item color="danger" (click)="removeCollection()">Remove Collection</button>
     </ion-list>
   `
@@ -22,6 +24,7 @@ export class ModifyCollectionPopover implements OnInit {
   constructor(
     private navParams: NavParams,
     private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private viewCtrl: ViewController,
     private firebase: FirebaseProvider
@@ -62,6 +65,14 @@ export class ModifyCollectionPopover implements OnInit {
 
   editTypes() {
     this.dismiss({ editTypes: true });
+  }
+
+  openShare() {
+    const modal = this.modalCtrl.create(ShareCollectionModal, {
+      collection: this.collection
+    });
+    modal.present();
+    this.dismiss();
   }
 
   removeCollection() {

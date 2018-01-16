@@ -14,7 +14,7 @@ export class MyApp {
 
   rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: string}>;
+  pages: Array<{title: string, component: string, badge?: () => number }>;
 
   constructor(
     public platform: Platform,

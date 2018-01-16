@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, LoadingController, NavController } from 'ionic-angular';
+import { AlertController, IonicPage, LoadingController, NavController, ToastController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { ItemCollection } from '../../models/Collection';
 import { CollectionTypesHash } from '../../models/CollectionTypes';
+
+import * as Clipboard from 'clipboard';
 
 import * as _ from 'lodash';
 
@@ -16,15 +18,33 @@ import * as _ from 'lodash';
 })
 export class AppCollectionsPage {
 
+  private clipboard: Clipboard;
+
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
     public firebase: FirebaseProvider
   ) {}
 
   ionViewWillEnter() {
     this.firebase.doAuthCheck();
+  }
+
+  ngOnInit() {
+    this.clipboard = new Clipboard('.copy-button');
+
+    this.clipboard.on('success', () => {
+      this.toastCtrl.create({
+        duration: 3000,
+        message: 'Copied Share ID to clipboard!'
+      }).present();
+    });
+  }
+
+  ngOnDestroy() {
+    if(this.clipboard) this.clipboard.destroy();
   }
 
   public createCollection() {

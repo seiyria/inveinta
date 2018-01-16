@@ -125,12 +125,14 @@ export class FirebaseProvider {
       }
     };
 
-    this.profileDoc.update({ [`collections.${collection.uuid}`]: true });
+    this.profileDoc.update({ [`collections.${collection.uuid}`]: true, name: this.name });
     this.allCollectionsCol.doc(collection.id).set(collection);
   }
 
   private async initProfile(): Promise<any> {
-    return this.profileDoc.set({});
+    return this.profileDoc.set({
+      name: this.name
+    });
   }
 
   public async loadCollectionItems(uuid: string): Promise<any> {
@@ -163,8 +165,8 @@ export class FirebaseProvider {
 
   }
 
-  public updateCollection(coll: ItemCollection) {
-    this.curCollectionDoc.update(coll);
+  public updateCollection(coll: ItemCollection): Promise<any> {
+    return this.curCollectionDoc.update(coll);
   }
 
   private async deleteCollection(db, collectionRef, batchSize) {
@@ -223,6 +225,21 @@ export class FirebaseProvider {
 
   public removeCollectionItem(item: Item) {
     this.curItemsCol.doc(item.id).delete();
+  }
+
+  public getUserObservable(id: string): Observable<Profile> {
+    return this.afStore.doc<Profile>(`users/${id}`).valueChanges();
+  }
+
+  public getUserById(id: string): Promise<Profile> {
+    return new Promise((resolve, reject) => {
+      const sub = this.getUserObservable(id).subscribe(data => {
+        if(!data) return reject(new Error(`User with id ${id} does not exist`));
+
+        resolve(data);
+        sub.unsubscribe();
+      });
+    });
   }
 
 }

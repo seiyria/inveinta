@@ -71,7 +71,7 @@ export class FirebaseProvider {
   private init() {
     this.auth$ = this.authState.subscribe(d => {
       if(!d) {
-        this.profileSubscription.unsubscribe();
+        if(this.profileSubscription) this.profileSubscription.unsubscribe();
         this.authData = null;
         return;
       }

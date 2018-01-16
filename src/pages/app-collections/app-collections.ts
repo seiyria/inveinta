@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, NavController } from 'ionic-angular';
+import { AlertController, IonicPage, LoadingController, NavController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @IonicPage({
@@ -15,6 +15,7 @@ export class AppCollectionsPage {
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     public firebase: FirebaseProvider
   ) {}
 
@@ -35,7 +36,17 @@ export class AppCollectionsPage {
           handler: ({ name }) => {
             name = name.trim();
             if(!name) return;
-            this.firebase.createNewCollection(name, {});
+
+            const loading = this.loadingCtrl.create({
+              content: 'Creating your new collection...'
+            });
+
+            loading.present();
+
+            this.firebase.createNewCollection(name, {})
+              .then(() => {
+                loading.dismiss();
+              });
           }
         }
       ]

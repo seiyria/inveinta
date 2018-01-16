@@ -7,7 +7,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Subscription } from 'rxjs/Subscription';
 import { Item, ItemCollection } from '../../models/Collection';
 import { AddItemModal } from './additem.modal';
-import { CollectionTypes } from '../../models/CollectionTypes';
+import { BGG_ATTR, CollectionTypes } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 import { ModifyCollectionPopover } from './modifycollection.popover';
@@ -99,15 +99,19 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
   private updateCollectionTypeColumns(coll: ItemCollection) {
     this.columns = [];
 
-    this.columns.push({ name: 'Name', prop: 'name', type: 'string' });
-
     Object.keys(coll.types).forEach(type => {
       const collTypeRef = _.find(CollectionTypes, { id: type });
       if(!collTypeRef) return;
       this.columns.push(...collTypeRef.props);
     });
 
-    this.columns = _.uniqBy(this.columns, 'prop');
+    this.columns = _(this.columns)
+      .uniqBy('prop')
+      .sortBy('compute')
+      .reverse()
+      .value();
+
+    this.columns.unshift({ name: 'Name', prop: 'name', type: 'string' });
   }
 
   public selectType(id: string): void {
@@ -193,6 +197,14 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     popover.present({
       ev: event
     });
+  }
+
+  public clickRow({ type, row }) {
+    if(type !== 'click') return;
+    
+    if(row.bggLink) {
+      window.open(BGG_ATTR.compute(row), '_blank');
+    }
   }
 
 }

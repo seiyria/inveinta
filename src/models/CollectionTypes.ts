@@ -1,16 +1,27 @@
 
-type AttrType = 'string' | 'money' | 'number' | 'boolean';
+import { ItemCollection } from './Collection';
+
+type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'computed';
 
 export class Attr {
   name: string;
   prop: string;
   type: AttrType;
+
+  // used for the display value
+  computeDisplay?: (coll: ItemCollection) => string;
+
+  // used for an internal value, whenever
+  compute?: (coll: ItemCollection) => string;
 }
 
-const NAME_ATTR: Attr =       { name: 'Name',     prop: 'name',       type: 'string' };
-const PRICE_ATTR: Attr =      { name: 'Price',    prop: 'price',      type: 'money' };
-const QTY_ATTR: Attr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
-const FORSALE_ATTR: Attr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
+export const NAME_ATTR: Attr =       { name: 'Name',     prop: 'name',       type: 'string' };
+export const PRICE_ATTR: Attr =      { name: 'Price',    prop: 'price',      type: 'money' };
+export const QTY_ATTR: Attr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
+export const FORSALE_ATTR: Attr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
+export const BGG_ATTR: Attr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
+    computeDisplay: (coll) => 'BGG Search',
+    compute: (coll) => `https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q=${encodeURIComponent(coll.name)}` };
 
 export class CollectionType {
   // display name of the type
@@ -32,7 +43,6 @@ export const CollectionTypes: CollectionType[] = [
     id: 'VALUE',
     desc: 'A mixin that associates a dollar value with your items. Useful if you have a wishlist or lots of electronics.',
     props: [
-      NAME_ATTR,
       PRICE_ATTR
     ]
   },
@@ -41,7 +51,7 @@ export const CollectionTypes: CollectionType[] = [
     id: 'BOARDGAME',
     desc: 'A mixin specifically for board games. Adds BGG search links to your items.',
     props: [
-      NAME_ATTR
+      BGG_ATTR
     ]
   },
   {
@@ -49,7 +59,6 @@ export const CollectionTypes: CollectionType[] = [
     id: 'TRADINGCARDS',
     desc: 'A mixin specifically for selling and trading items. Adds quantity, as well as a "for sale" checkbox.',
     props: [
-      NAME_ATTR,
       QTY_ATTR,
       FORSALE_ATTR
     ]
@@ -59,7 +68,6 @@ export const CollectionTypes: CollectionType[] = [
     desc: 'Just a plain list of items.',
     id: 'PLAIN',
     props: [
-      NAME_ATTR
     ]
   }
 ];

@@ -19,7 +19,7 @@ import { Attr } from '../../models/CollectionTypes';
 
     <ion-content padding>
       <ion-list>
-        <ion-item *ngFor="let column of columns">
+        <ion-item *ngFor="let column of columns" [class.hidden]="column.type === 'computed'">
           
           <ion-label *ngIf="column.type !== 'boolean'" stacked> {{ column.name }}</ion-label>
           <ion-label *ngIf="column.type === 'boolean'">{{ column.name }}</ion-label>
@@ -88,8 +88,23 @@ export class AddItemModal implements OnInit {
     return !!this.item.name;
   }
 
+  computeItemProperties(): void {
+    // coerce booleans so something always displays
+    this.columns.forEach(col => {
+      if(col.type !== 'boolean') return;
+      this.item[col.prop] = !!this.item[col.prop];
+    });
+
+    // compute properties where necessary
+    this.columns.forEach(col => {
+      if(!col.compute) return;
+      this.item[col.prop] = col.computeDisplay(this.item);
+    });
+  }
+
   submit(item?: Item) {
     if(!this.canSubmit()) return;
+    this.computeItemProperties();
     this.dismiss({ item, mode: this.mode });
   }
 

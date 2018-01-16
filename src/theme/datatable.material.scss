@@ -1,38 +1,6 @@
 
-// custom
-.ngx-datatable {
+@import "./datatable.custom";
 
-  margin: 8px;
-
-  i, span.sort-btn {
-    font-family: Ionicons;
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  .empty-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-  }
-
-  [title="true"], [title="false"] {
-    visibility: hidden;
-  }
-
-  [title="true"]:after {
-    content: "Yes";
-    visibility: visible;
-  }
-
-  [title="false"]:after {
-    content: "No";
-    visibility: visible;
-  }
-}
-
-// came with it
 .ngx-datatable.material {
   background: #FFF;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);

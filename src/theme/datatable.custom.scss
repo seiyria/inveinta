@@ -1,0 +1,49 @@
+
+.ngx-datatable {
+
+  margin: 8px;
+
+  // clickable cells are the only spots that are clickable
+  datatable-row-wrapper {
+    pointer-events: none;
+  }
+
+  i, span.sort-btn {
+    font-family: Ionicons;
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .empty-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+  }
+
+  [title="true"],
+  [title="false"] {
+    visibility: hidden;
+  }
+
+  [title="true"]:after,
+  [title="false"]:after {
+    visibility: visible;
+  }
+
+  [title="true"]:after {
+    content: "Yes";
+  }
+
+  [title="false"]:after {
+    content: "No";
+  }
+
+  [title*="BGG"] {
+    pointer-events: auto;
+    color: map-get($colors, primary);
+    cursor: pointer;
+    font-style: italic;
+  }
+
+}

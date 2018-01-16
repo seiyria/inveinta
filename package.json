@@ -5,12 +5,13 @@
   "homepage": "http://inveinta.com/",
   "private": true,
   "scripts": {
+    "start": "npm run ionic:serve",
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "build:prod": "ionic-app-scripts build --prod --release --aot",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve -c"
   },
   "dependencies": {
     "@angular/common": "5.0.3",

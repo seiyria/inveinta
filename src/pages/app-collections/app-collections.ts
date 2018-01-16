@@ -27,10 +27,13 @@ export class AppCollectionsPage {
     this.alertCtrl.create({
       title: 'Create Collection',
       subTitle: 'Give this collection a name',
+      enableBackdropDismiss: false,
       inputs: [
         {
           name: 'name',
-          placeholder: 'Collection Name'
+          placeholder: 'Collection Name',
+          id: 'collectionName',
+          value: ''
         }
       ],
       buttons: [

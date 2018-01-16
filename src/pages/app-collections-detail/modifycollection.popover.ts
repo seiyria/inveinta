@@ -69,7 +69,12 @@ export class ModifyCollectionPopover implements OnInit {
       title: 'Remove Collection',
       subTitle: 'Are you sure you want to remove this collection and all of it\'s items? This action is irreversible.',
       buttons: [
-        'No, keep it',
+        {
+          text: 'No, keep it',
+          handler: () => {
+            this.dismiss();
+          }
+        },
         {
           text: 'Yes, remove it',
           handler: () => {

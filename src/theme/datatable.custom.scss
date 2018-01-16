@@ -34,7 +34,11 @@
     content: "No";
   }
 
-  [title*="BGG Search"], [title*="HLTB Search"], [title*="GameFAQs Search"], [title*="Metacritic Search"] {
+  [title*="BGG Search"],
+  [title*="HLTB Search"],
+  [title*="GameFAQs Search"],
+  [title*="Metacritic Search"],
+  [title*="TCGPlayer Search"] {
     pointer-events: auto;
     color: map-get($colors, primary);
     cursor: pointer;

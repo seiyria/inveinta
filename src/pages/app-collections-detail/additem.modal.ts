@@ -21,8 +21,8 @@ import { Attr } from '../../models/CollectionTypes';
       <ion-list>
         <ion-item *ngFor="let column of columns" [class.hidden]="column.type === 'computed'">
           
-          <ion-label *ngIf="column.type !== 'boolean'" stacked> {{ column.name }}</ion-label>
-          <ion-label *ngIf="column.type === 'boolean'">{{ column.name }}</ion-label>
+          <ion-label *ngIf="shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
+          <ion-label *ngIf="!shouldStackLabel(column)">{{ column.name }}</ion-label>
           
           <ion-input *ngIf="column.type === 'string'" 
                      type="text"
@@ -41,6 +41,10 @@ import { Attr } from '../../models/CollectionTypes';
                      [placeholder]="column.name"
                      (keyup.enter)="submit()"
                      [(ngModel)]="item[column.prop]"></ion-input>
+
+          <ion-select [(ngModel)]="item[column.prop]" *ngIf="column.type === 'choice'">
+            <ion-option *ngFor="let choice of column.options">{{ choice }}</ion-option>
+          </ion-select>
 
           <ion-checkbox *ngIf="column.type === 'boolean'" [(ngModel)]="item[column.prop]"></ion-checkbox>
                       
@@ -82,6 +86,10 @@ export class AddItemModal implements OnInit {
     } else {
       this.item = {};
     }
+  }
+
+  shouldStackLabel(attr: Attr) {
+    return attr.type !== 'choice' && attr.type !== 'boolean';
   }
 
   canSubmit(): boolean {

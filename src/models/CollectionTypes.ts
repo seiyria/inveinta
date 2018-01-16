@@ -1,12 +1,13 @@
 
 import { ItemCollection } from './Collection';
 
-type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'computed';
+type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'computed';
 
 export class Attr {
   name: string;
   prop: string;
   type: AttrType;
+  options?: string[];
 
   // used for the display value
   computeDisplay?: (coll: ItemCollection) => string;
@@ -15,28 +16,45 @@ export class Attr {
   compute?: (coll: ItemCollection) => string;
 }
 
-export const NAME_ATTR: Attr =       { name: 'Name',     prop: 'name',       type: 'string' };
+// const NAME_ATTR: Attr =       { name: 'Name',     prop: 'name',       type: 'string' };
 
-export const PRICE_ATTR: Attr =      { name: 'Price',    prop: 'price',      type: 'money' };
+const PRICE_ATTR: Attr =      { name: 'Price',    prop: 'price',      type: 'money' };
 
-export const QTY_ATTR: Attr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
-export const FORSALE_ATTR: Attr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
+const QTY_ATTR: Attr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
+const FORSALE_ATTR: Attr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
 
-export const BGG_ATTR: Attr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
+const BGG_ATTR: Attr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
     computeDisplay: (coll) => 'BGG Search',
     compute: (coll) => `https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q=${encodeURIComponent(coll.name)}` };
 
-export const HLTB_ATTR: Attr =       { name: 'HowLongToBeat', prop: 'hltbLink', type: 'computed',
+const HLTB_ATTR: Attr =       { name: 'HowLongToBeat', prop: 'hltbLink', type: 'computed',
   computeDisplay: (coll) => 'HLTB Search',
   compute: (coll) => `https://howlongtobeat.com/?q=${encodeURIComponent(coll.name)}` };
 
-export const GFAQ_ATTR: Attr =       { name: 'GameFAQs', prop: 'gamefaqsLink', type: 'computed',
+const GFAQ_ATTR: Attr =       { name: 'GameFAQs', prop: 'gamefaqsLink', type: 'computed',
   computeDisplay: (coll) => 'GameFAQs Search',
   compute: (coll) => `https://www.gamefaqs.com/search?game=${encodeURIComponent(coll.name)}` };
 
-export const META_ATTR: Attr =       { name: 'Metacritic', prop: 'metacriticLink', type: 'computed',
+const TCGP_ATTR: Attr =       { name: 'TCGPlayer', prop: 'tcgpLink', type: 'computed',
+  computeDisplay: (coll) => 'TCGPlayer Search',
+  compute: (coll) => `https://shop.tcgplayer.com/productcatalog/product/show?ProductType=All&ProductName=${encodeURIComponent(coll.name)}` };
+
+const META_ATTR: Attr =       { name: 'Metacritic', prop: 'metacriticLink', type: 'computed',
   computeDisplay: (coll) => 'Metacritic Search',
   compute: (coll) => `http://www.metacritic.com/search/all/${encodeURIComponent(coll.name)}/results` };
+
+const GENRE_ATTR: Attr =      { name: 'Genre',     prop: 'genre',       type: 'string' };
+const AUTHOR_ATTR: Attr =     { name: 'Author',    prop: 'author',      type: 'string' };
+
+const GAMESYSTEM_ATTR: Attr = { name: 'Game System', prop: 'gameSystem',  type: 'string' };
+
+const MTG_RARITY_ATTR: Attr = { name: 'Rarity', prop: 'mtgRarity', type: 'choice',
+  options: ['Common', 'Uncommon', 'Rare', 'Mythic Rare'] };
+
+const MTG_COLOR_ATTR: Attr =  { name: 'Color', prop: 'mtgColor', type: 'choice',
+  options: ['Black', 'Red', 'White', 'Blue', 'Green'] };
+
+const MTG_SET_ATTR: Attr =    { name: 'Set',    prop: 'set',      type: 'string' };
 
 export class CollectionType {
   // display name of the type
@@ -81,10 +99,46 @@ export const CollectionTypes: CollectionType[] = [
   {
     name: 'Video Games',
     id: 'VIDEOGAME',
-    desc: 'A mixin specifically for video games. Adds How Long To Beat search links to your items.',
+    desc: 'A mixin specifically for video games. Adds Game System, How Long To Beat and GameFAQs search links to your items.',
     props: [
+      GAMESYSTEM_ATTR,
       HLTB_ATTR,
       GFAQ_ATTR
+    ]
+  },
+  {
+    name: 'Magic: The Gathering',
+    id: 'MTG',
+    desc: 'A mixin specifically for Magic: The Gathering. Adds rarity, type, color, set.',
+    props: [
+      MTG_RARITY_ATTR,
+      MTG_COLOR_ATTR,
+      MTG_SET_ATTR
+    ]
+  },
+  {
+    name: 'Books',
+    id: 'BOOK',
+    desc: 'A mixin specifically for books. Adds genre and author.',
+    props: [
+      GENRE_ATTR,
+      AUTHOR_ATTR
+    ]
+  },
+  {
+    name: 'Game Books',
+    id: 'GAMEBOOK',
+    desc: 'A mixin specifically for game books. Adds game system.',
+    props: [
+      GAMESYSTEM_ATTR
+    ]
+  },
+  {
+    name: 'TCGPlayer',
+    id: 'TCGPLAYER',
+    desc: 'A mixin that adds TCGPlayer search links to your items.',
+    props: [
+      TCGP_ATTR
     ]
   },
   {
@@ -99,8 +153,7 @@ export const CollectionTypes: CollectionType[] = [
     name: 'Plain',
     desc: 'Just a plain list of items.',
     id: 'PLAIN',
-    props: [
-    ]
+    props: []
   }
 ];
 

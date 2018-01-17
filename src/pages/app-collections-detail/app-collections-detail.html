@@ -87,7 +87,7 @@
       ></ngx-datatable>
     </div>
 
-    <ion-fab top right *ngIf="hasTypes(coll) && !forceEditTypes">
+    <ion-fab bottom right *ngIf="hasTypes(coll) && !forceEditTypes">
       <button ion-fab icon-only (click)="addNewItem(coll)"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 

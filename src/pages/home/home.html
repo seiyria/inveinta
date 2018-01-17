@@ -37,7 +37,14 @@
               {{ errorMessage }}
             </ion-item>
 
-            <button margin-top ion-button block (click)="login()" [disabled]="!loginInformation.valid">Login with Email</button>
+            <ion-row margin-top>
+              <ion-col>
+                <button ion-button block (click)="login()" [disabled]="!loginInformation.valid">Sign Up with Email</button>
+              </ion-col>
+              <ion-col>
+                <button ion-button block (click)="login()" color="secondary" [disabled]="!loginInformation.valid">Login with Email</button>
+              </ion-col>
+            </ion-row>
           </form>
 
         </ion-col>

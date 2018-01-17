@@ -26,6 +26,7 @@ import { Attr } from '../../models/CollectionTypes';
           
           <ion-input *ngIf="column.type === 'string'" 
                      type="text"
+                     maxlength="100"
                      [placeholder]="column.name" 
                      (keyup.enter)="submit()"
                      [(ngModel)]="item[column.prop]"></ion-input>

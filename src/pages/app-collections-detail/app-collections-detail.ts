@@ -214,6 +214,8 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
   }
 
   public onTableContextMenu({ event, content }, collection: ItemCollection) {
+    if(content.$$id) return;
+
     event.stopPropagation();
     event.preventDefault();
 

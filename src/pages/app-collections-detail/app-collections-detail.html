@@ -86,9 +86,17 @@
       >
         <ngx-datatable-row-detail #details>
           <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-            <markdown *ngIf="row.descriptionMD">
-              {{ row.descriptionMD || '(no description)' }}              
-            </markdown>
+            <ion-row>
+              <ion-col col-6 *ngIf="row.descriptionMD">
+                <markdown>
+                  {{ row.descriptionMD || '(no description)' }}              
+                </markdown>
+              </ion-col>
+
+              <ion-col col-6 *ngIf="row.imageURL">
+                <img [src]="row.imageURL" />
+              </ion-col>
+            </ion-row>
           </ng-template>
         </ngx-datatable-row-detail>
 

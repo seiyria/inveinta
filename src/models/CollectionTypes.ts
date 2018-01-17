@@ -69,6 +69,9 @@ const RATING_ATTR: CollectionAttr =     { name: 'Rating', prop: 'rating',   type
 
 const MARKDOWN_ATTR: CollectionAttr =   { name: 'Description', prop: 'descriptionMD', type: 'markdown', hidden: true };
 
+const COOK_TIME_ATTR: CollectionAttr =    { name: 'Cook Time', prop: 'cookTime', type: 'string' };
+const IMAGE_ATTR: CollectionAttr =   { name: 'Image URL', prop: 'imageURL', type: 'string', hidden: true };
+
 export class CollectionType {
   // display name of the type
   name: string;
@@ -168,6 +171,16 @@ export const CollectionTypes: CollectionType[] = [
     desc: 'A mixin that adds star ratings (1-5) to your items.',
     props: [
       RATING_ATTR
+    ]
+  },
+  {
+    name: 'Recipes',
+    id: 'RECIPE',
+    desc: 'A mixin that adds cook time, long description and an image link to your items.',
+    props: [
+      MARKDOWN_ATTR,
+      COOK_TIME_ATTR,
+      IMAGE_ATTR
     ]
   },
   {

@@ -16,3 +16,10 @@ Use nodejs >= 8.9.0 & npm >= 5.0.0
 
 * Creating a new page: `ionic g page app-<page-name>`
 * Never use tab controls. Ever.
+
+## Editing Firebase Functions
+
+* `cd functions`
+* `npm i`
+* edit
+* `npm run deploy:functions`

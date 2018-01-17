@@ -5,8 +5,6 @@ export class ItemCollection {
   id: string;
   name: string;
 
-  // the uuid representing this collection
-  uuid: string;
   createdAt: number;
   owner: string;
 
@@ -24,6 +22,6 @@ export class Item {
   id: string;
 
   // the collection id
-  collectionUUID: string;
+  collectionFBID: string;
   name: string;
 }

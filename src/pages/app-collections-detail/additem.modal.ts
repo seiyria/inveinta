@@ -29,8 +29,8 @@ import * as _ from 'lodash';
       <ion-list>
         <ion-item *ngFor="let column of columns" [class.hidden]="column.type === 'computed'">
           
-          <ion-label *ngIf="column.type !== 'rating' && shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
-          <ion-label *ngIf="column.type !== 'rating' && !shouldStackLabel(column)">{{ column.name }}</ion-label>
+          <ion-label *ngIf="!isSpecialColumn(column) && shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
+          <ion-label *ngIf="!isSpecialColumn(column) && !shouldStackLabel(column)">{{ column.name }}</ion-label>
           
           <ion-input *ngIf="column.type === 'string'" 
                      type="text"
@@ -57,12 +57,12 @@ import * as _ from 'lodash';
 
           <ion-checkbox *ngIf="column.type === 'boolean'" [(ngModel)]="item[column.prop]"></ion-checkbox>
           
-          <ion-row no-padding>
+          <ion-row no-padding *ngIf="column.type === 'rating'">
             <ion-col no-padding col-2>
               Rating
             </ion-col>
             <ion-col no-padding>
-              <rating *ngIf="column.type === 'rating'" [(ngModel)]="item[column.prop + 'Value']"></rating>
+              <rating [(ngModel)]="item[column.prop + 'Value']"></rating>
             </ion-col>
           </ion-row>
         </ion-item>
@@ -103,6 +103,10 @@ export class AddItemModal implements OnInit {
     } else {
       this.item = {};
     }
+  }
+
+  isSpecialColumn(attr: Attr) {
+    return attr.type === 'rating';
   }
 
   shouldStackLabel(attr: Attr) {

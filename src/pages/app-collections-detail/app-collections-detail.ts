@@ -95,6 +95,7 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
       syncAttributes();
       this.updateItemFilter();
     });
+
   }
 
   ngOnDestroy() {
@@ -184,7 +185,7 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
       if(!data) return;
       const { item, mode } = data;
       if(!item) return;
-      item.collectionUUID = this.uuid;
+      item.collectionFBID = this.uuid;
 
       if(mode === 'add') {
         this.firebase.addCollectionItem(item);

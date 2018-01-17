@@ -6,7 +6,6 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Profile } from '../../models/Profile';
 import { Item, ItemCollection } from '../../models/Collection';
 
-import * as uuid from 'uuid/v4';
 import { Events } from 'ionic-angular';
 
 @Injectable()
@@ -116,7 +115,6 @@ export class FirebaseProvider {
       name,
       id: this.afStore.createId(),
       createdAt: Date.now(),
-      uuid: uuid(),
       types,
       owner: this.uid,
       itemCount: 0,
@@ -125,7 +123,7 @@ export class FirebaseProvider {
       }
     };
 
-    this.profileDoc.update({ [`collections.${collection.uuid}`]: true, name: this.name });
+    this.profileDoc.update({ [`collections.${collection.id}`]: true, name: this.name });
     this.allCollectionsCol.doc(collection.id).set(collection);
   }
 
@@ -141,25 +139,22 @@ export class FirebaseProvider {
 
       this.curItemsCol = this.afStore.collection<Item>('items');
       this.curItemsLive = this.afStore.collection<Item>('items', ref => {
-        return ref.where('collectionUUID', '==', uuid);
+        return ref.where('collectionFBID', '==', uuid);
       }).valueChanges();
 
-      const curCollectionCol = this.afStore.collection<ItemCollection>('collections', ref => {
-        return ref
-          .where('uuid', '==', uuid)
-          .limit(1);
-      });
+      this.curCollectionDoc = this.afStore.doc<ItemCollection>(`collections/${uuid}`);
+      this.curCollectionLive = this.curCollectionDoc.valueChanges();
 
-      const curCollectionLive = curCollectionCol.snapshotChanges();
-      const sub = curCollectionLive.subscribe(data => {
-        if(!data.length) return reject(new Error('No collections match that id'));
-        const myDocId = data[0].payload.doc.id;
-        if(!myDocId) return reject(new Error('No collections have that specific id'));
+      // can't use curCollectionLive because it removes the possibility to resubscribe
+      const doesExist = this.curCollectionDoc.valueChanges().subscribe(data => {
+        doesExist.unsubscribe();
 
-        this.curCollectionDoc = this.afStore.doc<ItemCollection>(`collections/${myDocId}`);
-        this.curCollectionLive = this.curCollectionDoc.valueChanges();
-        resolve();
-        sub.unsubscribe();
+        if(!data) {
+          reject(new Error('Collection does not exist'));
+          return;
+        }
+
+        resolve(data);
       });
     });
 
@@ -214,7 +209,7 @@ export class FirebaseProvider {
   }
 
   public addCollectionItem(item: Item) {
-    if(!item.collectionUUID) return;
+    if(!item.collectionFBID) return;
     item.id = this.afStore.createId();
     this.curItemsCol.doc(item.id).set(item);
   }

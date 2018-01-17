@@ -73,7 +73,6 @@
       <ngx-datatable
         class="material striped"
         [rows]="visibleItems"
-        [columns]="columns"
         [limit]="20"
         columnMode="force"
         [cssClasses]="ngxDataTableIcons"
@@ -84,7 +83,13 @@
         [sorts]="[{prop: 'name', dir: 'asc'}]"
         (activate)="clickCell($event)"
         (tableContextmenu)="onTableContextMenu($event, coll)"
-      ></ngx-datatable>
+      >
+        <ngx-datatable-column *ngFor="let column of columns" [name]="column.name">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row[column.prop] }}
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
     </div>
 
     <ion-fab bottom right *ngIf="hasTypes(coll) && !forceEditTypes">

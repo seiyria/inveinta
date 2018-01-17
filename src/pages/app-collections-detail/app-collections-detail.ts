@@ -7,7 +7,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Subscription } from 'rxjs/Subscription';
 import { Item, ItemCollection } from '../../models/Collection';
 import { AddItemModal } from './additem.modal';
-import { CollectionTypes } from '../../models/CollectionTypes';
+import { CollectionAttr, CollectionTypes } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 import { ModifyCollectionPopover } from './modifycollection.popover';
@@ -25,7 +25,7 @@ import { ModifyItemPopover } from './modifyitem.popover';
 export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   private uuid: string;
-  public columns = [];
+  public columns: CollectionAttr[] = [];
 
   private coll$: Subscription;
   private items$: Subscription;

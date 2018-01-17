@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { Item, ItemCollection } from '../../models/Collection';
-import { Attr } from '../../models/CollectionTypes';
+import { CollectionAttr } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 
@@ -84,7 +84,7 @@ export class AddItemModal implements OnInit {
 
   public item: any;
   public collection: ItemCollection;
-  public columns: Attr[] = [];
+  public columns: CollectionAttr[] = [];
 
   private mode: 'add'|'edit' = 'add';
 
@@ -105,11 +105,11 @@ export class AddItemModal implements OnInit {
     }
   }
 
-  isSpecialColumn(attr: Attr) {
+  isSpecialColumn(attr: CollectionAttr) {
     return attr.type === 'rating';
   }
 
-  shouldStackLabel(attr: Attr) {
+  shouldStackLabel(attr: CollectionAttr) {
     return !_.includes(['choice', 'boolean'], attr.type);
   }
 

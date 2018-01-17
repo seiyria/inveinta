@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, NavParams, ViewController } from 'ionic-angular';
 import { Item, ItemCollection } from '../../models/Collection';
-import { Attr } from '../../models/CollectionTypes';
+import { CollectionAttr } from '../../models/CollectionTypes';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @Component({
@@ -17,7 +17,7 @@ export class ModifyItemPopover implements OnInit {
 
   private item: Item;
   public collection: ItemCollection;
-  public columns: Attr[] = [];
+  public columns: CollectionAttr[] = [];
 
   private addItemCallback: Function;
 

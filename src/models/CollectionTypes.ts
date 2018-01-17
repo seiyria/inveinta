@@ -1,62 +1,62 @@
 
-import { ItemCollection } from './Collection';
+import { Item } from './Collection';
 
 type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'computed';
 
-export class Attr {
+export class CollectionAttr {
   name: string;
   prop: string;
   type: AttrType;
   options?: string[];
 
   // used for the display value
-  computeDisplay?: (coll: ItemCollection) => string;
+  computeDisplay?: (coll: Item) => string;
 
   // used for an internal value, whenever
-  compute?: (coll: ItemCollection) => string;
+  compute?: (coll: Item) => string;
 }
 
-// const NAME_ATTR: Attr =       { name: 'Name',     prop: 'name',       type: 'string' };
+// const NAME_ATTR: CollectionAttr =       { name: 'Name',     prop: 'name',       type: 'string' };
 
-const PRICE_ATTR: Attr =      { name: 'Price',    prop: 'price',      type: 'money' };
+const PRICE_ATTR: CollectionAttr =      { name: 'Price',    prop: 'price',      type: 'money' };
 
-const QTY_ATTR: Attr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
-const FORSALE_ATTR: Attr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
+const QTY_ATTR: CollectionAttr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
+const FORSALE_ATTR: CollectionAttr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
 
-const BGG_ATTR: Attr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
+const BGG_ATTR: CollectionAttr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
     computeDisplay: (coll) => 'BGG Search',
     compute: (coll) => `https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q=${encodeURIComponent(coll.name)}` };
 
-const HLTB_ATTR: Attr =       { name: 'HowLongToBeat', prop: 'hltbLink', type: 'computed',
+const HLTB_ATTR: CollectionAttr =       { name: 'HowLongToBeat', prop: 'hltbLink', type: 'computed',
   computeDisplay: (coll) => 'HLTB Search',
   compute: (coll) => `https://howlongtobeat.com/?q=${encodeURIComponent(coll.name)}` };
 
-const GFAQ_ATTR: Attr =       { name: 'GameFAQs', prop: 'gamefaqsLink', type: 'computed',
+const GFAQ_ATTR: CollectionAttr =       { name: 'GameFAQs', prop: 'gamefaqsLink', type: 'computed',
   computeDisplay: (coll) => 'GameFAQs Search',
   compute: (coll) => `https://www.gamefaqs.com/search?game=${encodeURIComponent(coll.name)}` };
 
-const TCGP_ATTR: Attr =       { name: 'TCGPlayer', prop: 'tcgpLink', type: 'computed',
+const TCGP_ATTR: CollectionAttr =       { name: 'TCGPlayer', prop: 'tcgpLink', type: 'computed',
   computeDisplay: (coll) => 'TCGPlayer Search',
   compute: (coll) => `https://shop.tcgplayer.com/productcatalog/product/show?ProductType=All&ProductName=${encodeURIComponent(coll.name)}` };
 
-const META_ATTR: Attr =       { name: 'Metacritic', prop: 'metacriticLink', type: 'computed',
+const META_ATTR: CollectionAttr =       { name: 'Metacritic', prop: 'metacriticLink', type: 'computed',
   computeDisplay: (coll) => 'Metacritic Search',
   compute: (coll) => `http://www.metacritic.com/search/all/${encodeURIComponent(coll.name)}/results` };
 
-const GENRE_ATTR: Attr =      { name: 'Genre',     prop: 'genre',       type: 'string' };
-const AUTHOR_ATTR: Attr =     { name: 'Author',    prop: 'author',      type: 'string' };
+const GENRE_ATTR: CollectionAttr =      { name: 'Genre',     prop: 'genre',       type: 'string' };
+const AUTHOR_ATTR: CollectionAttr =     { name: 'Author',    prop: 'author',      type: 'string' };
 
-const GAMESYSTEM_ATTR: Attr = { name: 'Game System', prop: 'gameSystem',  type: 'string' };
+const GAMESYSTEM_ATTR: CollectionAttr = { name: 'Game System', prop: 'gameSystem',  type: 'string' };
 
-const MTG_RARITY_ATTR: Attr = { name: 'Rarity', prop: 'mtgRarity', type: 'choice',
+const MTG_RARITY_ATTR: CollectionAttr = { name: 'Rarity', prop: 'mtgRarity', type: 'choice',
   options: ['Common', 'Uncommon', 'Rare', 'Mythic Rare'] };
 
-const MTG_COLOR_ATTR: Attr =  { name: 'Color', prop: 'mtgColor', type: 'choice',
+const MTG_COLOR_ATTR: CollectionAttr =  { name: 'Color', prop: 'mtgColor', type: 'choice',
   options: ['Black', 'Red', 'White', 'Blue', 'Green'] };
 
-const MTG_SET_ATTR: Attr =    { name: 'Set',    prop: 'set',      type: 'string' };
+const MTG_SET_ATTR: CollectionAttr =    { name: 'Set',    prop: 'set',      type: 'string' };
 
-const RATING_ATTR: Attr =     { name: 'Rating', prop: 'rating',   type: 'rating',
+const RATING_ATTR: CollectionAttr =     { name: 'Rating', prop: 'rating',   type: 'rating',
   computeDisplay: (item) => {
     item['ratingValue'] = item['ratingValue'] || 0;
 
@@ -77,7 +77,7 @@ export class CollectionType {
   desc: string;
 
   // the properties added by the type
-  props: Attr[];
+  props: CollectionAttr[];
 }
 
 export const CollectionTypes: CollectionType[] = [

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavParams, ViewController } from 'ionic-angular';
 import { ItemCollection } from '../../models/Collection';
-import { Attr } from '../../models/CollectionTypes';
+import { CollectionAttr } from '../../models/CollectionTypes';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { ShareCollectionModal } from './sharing.modal';
 
@@ -19,7 +19,7 @@ import { ShareCollectionModal } from './sharing.modal';
 export class ModifyCollectionPopover implements OnInit {
 
   public collection: ItemCollection;
-  public columns: Attr[] = [];
+  public columns: CollectionAttr[] = [];
 
   constructor(
     private navParams: NavParams,

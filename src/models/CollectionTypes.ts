@@ -1,7 +1,7 @@
 
 import { ItemCollection } from './Collection';
 
-type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'computed';
+type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'computed';
 
 export class Attr {
   name: string;
@@ -55,6 +55,16 @@ const MTG_COLOR_ATTR: Attr =  { name: 'Color', prop: 'mtgColor', type: 'choice',
   options: ['Black', 'Red', 'White', 'Blue', 'Green'] };
 
 const MTG_SET_ATTR: Attr =    { name: 'Set',    prop: 'set',      type: 'string' };
+
+const RATING_ATTR: Attr =     { name: 'Rating', prop: 'rating',   type: 'rating',
+  computeDisplay: (item) => {
+    item['ratingValue'] = item['ratingValue'] || 0;
+
+    const actualRating = Array(item['ratingValue']).fill(null).map(x => '★');
+    const filler = Array(5 - actualRating.length).fill(null).map(x => '☆');
+
+    return actualRating.join('') + filler.join('');
+  }};
 
 export class CollectionType {
   // display name of the type
@@ -147,6 +157,14 @@ export const CollectionTypes: CollectionType[] = [
     desc: 'A mixin that adds Metacritic search links to your items.',
     props: [
       META_ATTR
+    ]
+  },
+  {
+    name: 'Star Ratings',
+    id: 'STARRATING',
+    desc: 'A mixin that adds star ratings (1-5) to your items.',
+    props: [
+      RATING_ATTR
     ]
   },
   {

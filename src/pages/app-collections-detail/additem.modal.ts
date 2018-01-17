@@ -3,7 +3,15 @@ import { NavParams, ViewController } from 'ionic-angular';
 import { Item, ItemCollection } from '../../models/Collection';
 import { Attr } from '../../models/CollectionTypes';
 
+import * as _ from 'lodash';
+
 @Component({
+  styles: [`
+    rating /deep/ ul.rating { 
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  `],
   template: `
     <ion-header>
 
@@ -21,8 +29,8 @@ import { Attr } from '../../models/CollectionTypes';
       <ion-list>
         <ion-item *ngFor="let column of columns" [class.hidden]="column.type === 'computed'">
           
-          <ion-label *ngIf="shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
-          <ion-label *ngIf="!shouldStackLabel(column)">{{ column.name }}</ion-label>
+          <ion-label *ngIf="column.type !== 'rating' && shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
+          <ion-label *ngIf="column.type !== 'rating' && !shouldStackLabel(column)">{{ column.name }}</ion-label>
           
           <ion-input *ngIf="column.type === 'string'" 
                      type="text"
@@ -48,10 +56,18 @@ import { Attr } from '../../models/CollectionTypes';
           </ion-select>
 
           <ion-checkbox *ngIf="column.type === 'boolean'" [(ngModel)]="item[column.prop]"></ion-checkbox>
-                      
+          
+          <ion-row no-padding>
+            <ion-col no-padding col-2>
+              Rating
+            </ion-col>
+            <ion-col no-padding>
+              <rating *ngIf="column.type === 'rating'" [(ngModel)]="item[column.prop + 'Value']"></rating>
+            </ion-col>
+          </ion-row>
         </ion-item>
       </ion-list>
-
+      
     </ion-content>
     
     <ion-footer>
@@ -90,7 +106,7 @@ export class AddItemModal implements OnInit {
   }
 
   shouldStackLabel(attr: Attr) {
-    return attr.type !== 'choice' && attr.type !== 'boolean';
+    return !_.includes(['choice', 'boolean'], attr.type);
   }
 
   canSubmit(): boolean {
@@ -102,6 +118,12 @@ export class AddItemModal implements OnInit {
     this.columns.forEach(col => {
       if(col.type !== 'boolean') return;
       this.item[col.prop] = !!this.item[col.prop];
+    });
+
+    // copy rating values to actual displays
+    this.columns.forEach(col => {
+      if(col.type !== 'rating') return;
+      this.item[col.prop] = col.computeDisplay(this.item);
     });
 
     // compute properties where necessary

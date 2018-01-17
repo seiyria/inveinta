@@ -16,6 +16,7 @@ import { ModifyCollectionPopover } from '../pages/app-collections-detail/modifyc
 import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.popover';
 import { ShareCollectionModal } from '../pages/app-collections-detail/sharing.modal';
 import { NotifierProvider } from '../providers/notifier/notifier';
+import { Ionic2RatingModule } from 'ionic2-rating';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { NotifierProvider } from '../providers/notifier/notifier';
     FormsModule,
     ProvidersModule,
     IonicModule.forRoot(MyApp),
+    Ionic2RatingModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -107,9 +107,15 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     // TODO run this in the background
     this.allItems.forEach(item => {
       this.columns.forEach(col => {
-        if(!col.compute) return;
+        if(!col.computeDisplay) return;
 
+        // items should be shallow
+        const oldItem = _.clone(item);
         item[col.prop] = col.computeDisplay(item);
+
+        if(!_.isEqual(oldItem, item)) {
+          this.firebase.updateCollectionItem(item);
+        }
       });
     });
   }

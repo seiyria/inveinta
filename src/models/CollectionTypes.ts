@@ -1,12 +1,13 @@
 
 import { Item } from './Collection';
 
-type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'computed';
+type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'markdown' | 'computed';
 
 export class CollectionAttr {
   name: string;
   prop: string;
   type: AttrType;
+  hidden?: boolean;
   options?: string[];
 
   // used for the display value
@@ -65,6 +66,8 @@ const RATING_ATTR: CollectionAttr =     { name: 'Rating', prop: 'rating',   type
 
     return actualRating.join('') + filler.join('');
   }};
+
+const MARKDOWN_ATTR: CollectionAttr =   { name: 'Description', prop: 'descriptionMD', type: 'markdown', hidden: true };
 
 export class CollectionType {
   // display name of the type
@@ -165,6 +168,14 @@ export const CollectionTypes: CollectionType[] = [
     desc: 'A mixin that adds star ratings (1-5) to your items.',
     props: [
       RATING_ATTR
+    ]
+  },
+  {
+    name: 'Extended Description',
+    id: 'LONGDESC',
+    desc: 'A mixin that adds a long description to your items (supports markdown).',
+    props: [
+      MARKDOWN_ATTR
     ]
   },
   {

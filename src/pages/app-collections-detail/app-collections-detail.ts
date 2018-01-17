@@ -7,7 +7,7 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Subscription } from 'rxjs/Subscription';
 import { Item, ItemCollection } from '../../models/Collection';
 import { AddItemModal } from './additem.modal';
-import { CollectionAttr, CollectionTypes } from '../../models/CollectionTypes';
+import { CollectionAttr, CollectionTypes, CollectionTypesHash } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 import { ModifyCollectionPopover } from './modifycollection.popover';
@@ -25,7 +25,9 @@ import { ModifyItemPopover } from './modifyitem.popover';
 export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   private uuid: string;
-  public columns: CollectionAttr[] = [];
+  private columns: CollectionAttr[] = [];
+  public displayColumns: CollectionAttr[] = [];
+  private hiddenColumns: CollectionAttr[] = [];
 
   private coll$: Subscription;
   private items$: Subscription;
@@ -54,6 +56,10 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   public get hasSelectedTypes(): boolean {
     return Object.keys(this.selectedTypes).length > 0;
+  }
+
+  public get shouldExpand(): boolean {
+    return this.columns.length !== this.displayColumns.length;
   }
 
   constructor(
@@ -100,6 +106,10 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     if(this.items$) this.items$.unsubscribe();
   }
 
+  public canItemExpand(item: Item): boolean {
+    return _.some(this.hiddenColumns, col => item[col.prop]);
+  }
+
   public updateItemFilter() {
     if(!this.itemFilterQuery) {
       this.visibleItems = this.allItems;
@@ -116,8 +126,9 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     this.columns = [];
 
     Object.keys(coll.types).forEach(type => {
-      const collTypeRef = _.find(CollectionTypes, { id: type });
+      const collTypeRef = CollectionTypesHash[type];
       if(!collTypeRef) return;
+
       this.columns.push(...collTypeRef.props);
     });
 
@@ -128,6 +139,9 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
       .value();
 
     this.columns.unshift({ name: 'Name', prop: 'name', type: 'string' });
+
+    this.displayColumns = _.reject(this.columns, prop => prop.hidden);
+    this.hiddenColumns  = _.filter(this.columns, prop => prop.hidden);
   }
 
   public selectType(id: string): void {

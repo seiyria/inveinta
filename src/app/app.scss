@@ -26,6 +26,10 @@
   display: none !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .greeting-block {
   background: linear-gradient(135deg, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #294457 100%);
   background-size: cover;

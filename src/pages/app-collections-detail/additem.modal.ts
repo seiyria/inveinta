@@ -11,6 +11,10 @@ import * as _ from 'lodash';
       margin: 0 !important;
       padding: 0 !important;
     }
+
+    ion-textarea textarea {
+      height: 200px;
+    }
   `],
   template: `
     <ion-header>
@@ -54,6 +58,11 @@ import * as _ from 'lodash';
           <ion-select [(ngModel)]="item[column.prop]" *ngIf="column.type === 'choice'">
             <ion-option *ngFor="let choice of column.options">{{ choice }}</ion-option>
           </ion-select>
+
+          <ion-textarea *ngIf="column.type === 'markdown'" 
+                        [(ngModel)]="item[column.prop]" 
+                        maxlength="5000"
+                        placeholder="Enter a description (markdown supported)"></ion-textarea>
 
           <ion-checkbox *ngIf="column.type === 'boolean'" [(ngModel)]="item[column.prop]"></ion-checkbox>
           

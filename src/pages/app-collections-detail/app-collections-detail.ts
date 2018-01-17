@@ -88,11 +88,8 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
       this.updateCollectionTypeColumns(coll);
     });
 
-    const syncAttributes = _.once(() => this.syncComputedAttributes());
-
     this.items$ = this.firebase.currentCollectionItems.subscribe(data => {
       this.allItems = data;
-      syncAttributes();
       this.updateItemFilter();
     });
 
@@ -101,24 +98,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     if(this.coll$) this.coll$.unsubscribe();
     if(this.items$) this.items$.unsubscribe();
-  }
-
-  private syncComputedAttributes() {
-
-    // TODO run this in the background
-    this.allItems.forEach(item => {
-      this.columns.forEach(col => {
-        if(!col.computeDisplay) return;
-
-        // items should be shallow
-        const oldItem = _.clone(item);
-        item[col.prop] = col.computeDisplay(item);
-
-        if(!_.isEqual(oldItem, item)) {
-          this.firebase.updateCollectionItem(item);
-        }
-      });
-    });
   }
 
   public updateItemFilter() {
@@ -236,12 +215,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     popover.present({
       ev: event
     });
-  }
-
-  public clickCell({ type, column, row }) {
-    if(type !== 'click' || !column.compute) return;
-
-    window.open(column.compute(row), '_blank');
   }
 
 }

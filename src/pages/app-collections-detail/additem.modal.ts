@@ -129,12 +129,6 @@ export class AddItemModal implements OnInit {
       if(col.type !== 'rating') return;
       this.item[col.prop] = col.computeDisplay(this.item);
     });
-
-    // compute properties where necessary
-    this.columns.forEach(col => {
-      if(!col.compute) return;
-      this.item[col.prop] = col.computeDisplay(this.item);
-    });
   }
 
   submit(item?: Item) {

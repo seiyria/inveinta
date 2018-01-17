@@ -12,7 +12,8 @@
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve -c",
-    "deploy:functions": "npm --prefix functions run deploy"
+    "deploy:functions": "npm --prefix functions run deploy",
+    "deploy:rules": "firebase deploy --only firestore:rules"
   },
   "dependencies": {
     "@angular/common": "5.0.3",

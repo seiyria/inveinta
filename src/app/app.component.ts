@@ -12,6 +12,12 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
+  private ctorToPage = {
+    AppCollectionsPage: 'Collections',
+    ApppCollectionsDetailPage: 'Collections'
+  };
+
+  public activePage: string;
   rootPage: any = HomePage;
 
   pages: Array<{title: string, component: string, badge?: () => number }>;
@@ -39,6 +45,13 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      this.nav.viewDidEnter.subscribe((view) => {
+        const curPage = this.ctorToPage[view.instance.constructor.name];
+        if(!curPage) return;
+
+        this.activePage = curPage;
+      });
     });
 
     this.events.subscribe('you-cant-be-here', () => {
@@ -47,6 +60,8 @@ export class MyApp {
   }
 
   async openPage(page) {
+    if(this.activePage === page.component) return;
+
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
 

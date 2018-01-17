@@ -28,19 +28,19 @@ import { Attr } from '../../models/CollectionTypes';
                      type="text"
                      maxlength="100"
                      [placeholder]="column.name" 
-                     (keyup.enter)="submit()"
+                     (keyup.enter)="submit(item)"
                      [(ngModel)]="item[column.prop]"></ion-input>
 
           <ion-input *ngIf="column.type === 'number'"
                      type="number" 
                      [placeholder]="column.name"
-                     (keyup.enter)="submit()"
+                     (keyup.enter)="submit(item)"
                      [(ngModel)]="item[column.prop]"></ion-input>
 
           <ion-input *ngIf="column.type === 'money'" 
                      type="number" 
                      [placeholder]="column.name"
-                     (keyup.enter)="submit()"
+                     (keyup.enter)="submit(item)"
                      [(ngModel)]="item[column.prop]"></ion-input>
 
           <ion-select [(ngModel)]="item[column.prop]" *ngIf="column.type === 'choice'">

@@ -16,33 +16,4 @@
     font-size: 1.5rem;
   }
 
-  [title="true"],
-  [title="false"] {
-    visibility: hidden;
-  }
-
-  [title="true"]:after,
-  [title="false"]:after {
-    visibility: visible;
-  }
-
-  [title="true"]:after {
-    content: "Yes";
-  }
-
-  [title="false"]:after {
-    content: "No";
-  }
-
-  [title*="BGG Search"],
-  [title*="HLTB Search"],
-  [title*="GameFAQs Search"],
-  [title*="Metacritic Search"],
-  [title*="TCGPlayer Search"] {
-    pointer-events: auto;
-    color: map-get($colors, primary);
-    cursor: pointer;
-    font-style: italic;
-  }
-
 }

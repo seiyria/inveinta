@@ -87,13 +87,13 @@
         <ngx-datatable-row-detail #details>
           <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
             <ion-row>
-              <ion-col col-6 *ngIf="row.descriptionMD">
+              <ion-col *ngIf="row.descriptionMD">
                 <markdown>
-                  {{ row.descriptionMD || '(no description)' }}              
+                  {{ row.descriptionMD || '(no description)' }}
                 </markdown>
               </ion-col>
 
-              <ion-col col-6 *ngIf="row.imageURL">
+              <ion-col *ngIf="row.imageURL">
                 <img [src]="row.imageURL" />
               </ion-col>
             </ion-row>
@@ -118,8 +118,8 @@
           </ng-template>
        </ngx-datatable-column>
 
-        <ngx-datatable-column 
-          *ngFor="let column of displayColumns" 
+        <ngx-datatable-column
+          *ngFor="let column of displayColumns"
           [sortable]="column.compute"
           [name]="column.name">
 

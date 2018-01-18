@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
 import { Item, ItemCollection } from '../../models/Collection';
-import { CollectionAttr } from '../../models/CollectionTypes';
+import { CollectionAttr, RATING_DISPLAY_HELPER } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 
@@ -36,7 +36,7 @@ import * as _ from 'lodash';
           <ion-label *ngIf="!isSpecialColumn(column) && shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
           <ion-label *ngIf="!isSpecialColumn(column) && !shouldStackLabel(column)">{{ column.name }}</ion-label>
           
-          <ion-input *ngIf="column.type === 'string'" 
+          <ion-input *ngIf="column.type === 'string' || column.type === 'imageURL'" 
                      type="text"
                      maxlength="100"
                      [placeholder]="column.name" 
@@ -136,7 +136,7 @@ export class AddItemModal implements OnInit {
     // copy rating values to actual displays
     this.columns.forEach(col => {
       if(col.type !== 'rating') return;
-      this.item[col.prop] = col.computeDisplay(this.item);
+      this.item[col.prop] = RATING_DISPLAY_HELPER(this.item);
     });
   }
 

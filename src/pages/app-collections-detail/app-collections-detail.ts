@@ -7,11 +7,13 @@ import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Subscription } from 'rxjs/Subscription';
 import { Item, ItemCollection } from '../../models/Collection';
 import { AddItemModal } from './additem.modal';
-import { CollectionAttr, CollectionTypes, CollectionTypesHash } from '../../models/CollectionTypes';
+import { CollectionAttr, CollectionType, CollectionTypes, CollectionTypesHash } from '../../models/CollectionTypes';
 
 import * as _ from 'lodash';
 import { ModifyCollectionPopover } from './modifycollection.popover';
 import { ModifyItemPopover } from './modifyitem.popover';
+import { AddMixinModal } from './addmixin.modal';
+import { ModifyMixinPopover } from './modifymixin.popover';
 
 @IonicPage({
   name: 'CollectionsDetail',
@@ -31,6 +33,7 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   private coll$: Subscription;
   private items$: Subscription;
+
   private allItems: Item[] = [];
   public visibleItems: Item[] = [];
 
@@ -50,7 +53,11 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     };
   }
 
-  public get types() {
+  public get myTypes(): CollectionType[] {
+    return _.values(this.firebase.currentProfile.mixins || {});
+  }
+
+  public get types(): CollectionType[] {
     return CollectionTypes;
   }
 
@@ -126,8 +133,17 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     this.columns = [];
 
     Object.keys(coll.types).forEach(type => {
-      const collTypeRef = CollectionTypesHash[type];
-      if(!collTypeRef) return;
+      let collTypeRef = CollectionTypesHash[type];
+      if(!collTypeRef) {
+        collTypeRef = _.find(this.myTypes, { id: type });
+
+        // if we don't have a custom mixin of this type and it's not in the hash, remove and save
+        if(!collTypeRef) {
+          delete coll.types[type];
+          this.firebase.updateCollection(coll);
+          return;
+        }
+      }
 
       this.columns.push(...collTypeRef.props);
     });
@@ -228,6 +244,43 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
     popover.present({
       ev: event
+    });
+  }
+
+  public getComputeString(attr: CollectionAttr, item: Item) {
+    if(attr.computeString) return attr.computeString.split('{name}').join(encodeURIComponent(item.name));
+    if(attr.compute) return attr.compute(item);
+    return '';
+  }
+
+  public createMixin(mixin?: CollectionType) {
+
+    const modal = this.modalCtrl.create(AddMixinModal, {
+      item: mixin
+    });
+
+    modal.onDidDismiss((data) => {
+      if(!data) return;
+      const { item } = data;
+      if(!item) return;
+
+      this.firebase.updateCustomMixin(item);
+    });
+
+    modal.present();
+  }
+
+  public editMixinMenu($event, mixin: CollectionType) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    const popover = this.popoverCtrl.create(ModifyMixinPopover,{
+      item: mixin,
+      addItemCallback: () => this.createMixin(mixin)
+    });
+
+    popover.present({
+      ev: $event
     });
   }
 

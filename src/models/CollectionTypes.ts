@@ -1,7 +1,7 @@
 
 import { Item } from './Collection';
 
-type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'markdown' | 'computed';
+type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'markdown' | 'imageURL' | 'computed';
 
 export class CollectionAttr {
   name: string;
@@ -9,15 +9,16 @@ export class CollectionAttr {
   type: AttrType;
   hidden?: boolean;
   options?: string[];
+  optionString?: string;
 
   // used for the display value
+  computeDisplayString?: string;
   computeDisplay?: (coll: Item) => string;
 
   // used for an internal value, whenever
   compute?: (coll: Item) => string;
+  computeString?: string;
 }
-
-// const NAME_ATTR: CollectionAttr =       { name: 'Name',     prop: 'name',       type: 'string' };
 
 const PRICE_ATTR: CollectionAttr =      { name: 'Price',    prop: 'price',      type: 'money' };
 
@@ -25,24 +26,24 @@ const QTY_ATTR: CollectionAttr =        { name: 'Quantity', prop: 'quantity',   
 const FORSALE_ATTR: CollectionAttr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
 
 const BGG_ATTR: CollectionAttr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
-    computeDisplay: (coll) => 'BGG Search',
-    compute: (coll) => `https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q=${encodeURIComponent(coll.name)}` };
+    computeDisplayString: 'BGG Search',
+    computeString: `https://boardgamegeek.com/geeksearch.php?action=search&objecttype=boardgame&q={name}` };
 
 const HLTB_ATTR: CollectionAttr =       { name: 'HowLongToBeat', prop: 'hltbLink', type: 'computed',
-  computeDisplay: (coll) => 'HLTB Search',
-  compute: (coll) => `https://howlongtobeat.com/?q=${encodeURIComponent(coll.name)}` };
+  computeDisplayString: 'HLTB Search',
+  computeString: `https://howlongtobeat.com/?q={name}` };
 
 const GFAQ_ATTR: CollectionAttr =       { name: 'GameFAQs', prop: 'gamefaqsLink', type: 'computed',
-  computeDisplay: (coll) => 'GameFAQs Search',
-  compute: (coll) => `https://www.gamefaqs.com/search?game=${encodeURIComponent(coll.name)}` };
+  computeDisplayString: 'GameFAQs Search',
+  computeString: `https://www.gamefaqs.com/search?game={name}` };
 
 const TCGP_ATTR: CollectionAttr =       { name: 'TCGPlayer', prop: 'tcgpLink', type: 'computed',
-  computeDisplay: (coll) => 'TCGPlayer Search',
-  compute: (coll) => `https://shop.tcgplayer.com/productcatalog/product/show?ProductType=All&ProductName=${encodeURIComponent(coll.name)}` };
+  computeDisplayString: 'TCGPlayer Search',
+  computeString: `https://shop.tcgplayer.com/productcatalog/product/show?ProductType=All&ProductName={name}` };
 
 const META_ATTR: CollectionAttr =       { name: 'Metacritic', prop: 'metacriticLink', type: 'computed',
-  computeDisplay: (coll) => 'Metacritic Search',
-  compute: (coll) => `http://www.metacritic.com/search/all/${encodeURIComponent(coll.name)}/results` };
+  computeDisplayString: 'Metacritic Search',
+  computeString: `http://www.metacritic.com/search/all/{name}/results` };
 
 const GENRE_ATTR: CollectionAttr =      { name: 'Genre',     prop: 'genre',       type: 'string' };
 const AUTHOR_ATTR: CollectionAttr =     { name: 'Author',    prop: 'author',      type: 'string' };
@@ -57,20 +58,21 @@ const MTG_COLOR_ATTR: CollectionAttr =  { name: 'Color', prop: 'mtgColor', type:
 
 const MTG_SET_ATTR: CollectionAttr =    { name: 'Set',    prop: 'set',      type: 'string' };
 
-const RATING_ATTR: CollectionAttr =     { name: 'Rating', prop: 'rating',   type: 'rating',
-  computeDisplay: (item) => {
-    item['ratingValue'] = item['ratingValue'] || 0;
-
-    const actualRating = Array(item['ratingValue']).fill(null).map(x => '★');
-    const filler = Array(5 - actualRating.length).fill(null).map(x => '☆');
-
-    return actualRating.join('') + filler.join('');
-  }};
+const RATING_ATTR: CollectionAttr =     { name: 'Rating', prop: 'rating',   type: 'rating' };
 
 const MARKDOWN_ATTR: CollectionAttr =   { name: 'Description', prop: 'descriptionMD', type: 'markdown', hidden: true };
 
 const COOK_TIME_ATTR: CollectionAttr =    { name: 'Cook Time', prop: 'cookTime', type: 'string' };
-const IMAGE_ATTR: CollectionAttr =   { name: 'Image URL', prop: 'imageURL', type: 'string', hidden: true };
+const IMAGE_ATTR: CollectionAttr =   { name: 'Image URL', prop: 'imageURL', type: 'imageURL', hidden: true };
+
+export const RATING_DISPLAY_HELPER = (item) => {
+  item['ratingValue'] = item['ratingValue'] || 0;
+
+  const actualRating = Array(item['ratingValue']).fill(null).map(x => '★');
+  const filler = Array(5 - actualRating.length).fill(null).map(x => '☆');
+
+  return actualRating.join('') + filler.join('');
+};
 
 export class CollectionType {
   // display name of the type

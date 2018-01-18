@@ -7,6 +7,7 @@ import { Profile } from '../../models/Profile';
 import { Item, ItemCollection } from '../../models/Collection';
 
 import { Events } from 'ionic-angular';
+import { CollectionType } from '../../models/CollectionTypes';
 
 @Injectable()
 export class FirebaseProvider {
@@ -26,6 +27,8 @@ export class FirebaseProvider {
 
   private curItemsCol;
   private curItemsLive;
+
+  public currentProfile: Profile;
 
   public get authState(): Observable<any> {
     return this.afAuth.authState;
@@ -47,10 +50,6 @@ export class FirebaseProvider {
 
   public get isAuthenticated(): boolean {
     return !!this.uid;
-  }
-
-  public get myProfile() {
-    return this.profile;
   }
 
   public get myCollections(): Observable<ItemCollection[]> {
@@ -100,7 +99,10 @@ export class FirebaseProvider {
     this.profile = this.profileDoc.valueChanges();
 
     this.profileSubscription = this.profile.subscribe(d => {
-      if(d) return;
+      if(d) {
+        this.currentProfile = d;
+        return;
+      }
       this.initProfile();
     });
 
@@ -123,13 +125,15 @@ export class FirebaseProvider {
       }
     };
 
-    this.profileDoc.update({ [`collections.${collection.id}`]: true, name: this.name });
+    this.profileDoc.update({ [`collections.${collection.id}`]: true });
     this.allCollectionsCol.doc(collection.id).set(collection);
   }
 
   private async initProfile(): Promise<any> {
     return this.profileDoc.set({
-      name: this.name
+      name: this.name,
+      mixins: {},
+      collections: {}
     });
   }
 
@@ -235,6 +239,20 @@ export class FirebaseProvider {
         sub.unsubscribe();
       });
     });
+  }
+
+  public updateCustomMixin(mixin: CollectionType) {
+    this.currentProfile.mixins = this.currentProfile.mixins || {};
+    this.currentProfile.mixins[mixin.id] = mixin;
+
+    this.profileDoc.update({ mixins: this.currentProfile.mixins });
+  }
+
+  public removeCustomMixin(mixin: CollectionType) {
+    this.currentProfile.mixins = this.currentProfile.mixins || {};
+    delete this.currentProfile.mixins[mixin.id];
+
+    this.profileDoc.update({ mixins: this.currentProfile.mixins });
   }
 
 }

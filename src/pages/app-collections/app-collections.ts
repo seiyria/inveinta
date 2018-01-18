@@ -84,7 +84,12 @@ export class AppCollectionsPage {
   public collectionTypes(coll: ItemCollection): string[] {
 
     return _.compact(Object.keys(coll.types)
-      .map(id => CollectionTypesHash[id] ? CollectionTypesHash[id].name : null)
+      .map(id => {
+        if(CollectionTypesHash[id]) return CollectionTypesHash[id].name;
+        const myMixin = _.find(this.firebase.currentProfile.mixins, { id });
+        if(myMixin) return myMixin.name;
+        return null;
+      })
     );
   }
 

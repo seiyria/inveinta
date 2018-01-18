@@ -17,6 +17,8 @@ import { ModifyItemPopover } from '../pages/app-collections-detail/modifyitem.po
 import { ShareCollectionModal } from '../pages/app-collections-detail/sharing.modal';
 import { NotifierProvider } from '../providers/notifier/notifier';
 import { Ionic2RatingModule } from 'ionic2-rating';
+import { AddMixinModal } from '../pages/app-collections-detail/addmixin.modal';
+import { ModifyMixinPopover } from '../pages/app-collections-detail/modifymixin.popover';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { Ionic2RatingModule } from 'ionic2-rating';
     HomePage,
 
     AddItemModal,
+    AddMixinModal,
     ShareCollectionModal,
+    ModifyMixinPopover,
     ModifyCollectionPopover,
     ModifyItemPopover
   ],
@@ -41,8 +45,10 @@ import { Ionic2RatingModule } from 'ionic2-rating';
     HomePage,
 
     AddItemModal,
+    AddMixinModal,
     ShareCollectionModal,
     ModifyCollectionPopover,
+    ModifyMixinPopover,
     ModifyItemPopover
   ],
   providers: [

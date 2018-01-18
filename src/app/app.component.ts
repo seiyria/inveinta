@@ -6,16 +6,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 
+import * as _ from 'lodash';
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-
-  private ctorToPage = {
-    AppCollectionsPage: 'Collections',
-    AppCollectionsDetailPage: 'Collections'
-  };
 
   public activePage: string;
   public isOnPublicPage: boolean;
@@ -44,13 +41,9 @@ export class MyApp {
       this.splashScreen.hide();
 
       this.nav.viewWillEnter.subscribe((view) => {
-        const page = view.instance.constructor.name;
-        this.isOnPublicPage = page === 'AppPublicCollectionPage';
-
-        const curPage = this.ctorToPage[page];
-        if(!curPage) return;
-
-        this.activePage = curPage;
+        const page = view;
+        if(_.startsWith(view.id, 'collections/')) this.activePage = 'Collections';
+        this.isOnPublicPage = _.startsWith(view.id, 'p/');
       });
     });
 

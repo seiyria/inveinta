@@ -15,6 +15,8 @@ export class ItemCollection {
   sharedWith: { [key: string]: boolean };
 
   itemCount: number;
+
+  isPublic?: boolean;
 }
 
 export class Item {

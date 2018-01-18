@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { AppCollectionsDetailPage } from './app-collections-detail';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MarkdownModule } from 'angular2-markdown';
 import { TypeSearchFilterPipe } from './type-search-filter.pipe';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   declarations: [
@@ -13,8 +12,7 @@ import { TypeSearchFilterPipe } from './type-search-filter.pipe';
   entryComponents: [
   ],
   imports: [
-    NgxDatatableModule,
-    MarkdownModule,
+    ComponentsModule,
     IonicPageModule.forChild(AppCollectionsDetailPage),
   ],
 })

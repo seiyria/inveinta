@@ -1,4 +1,4 @@
-<ion-split-pane when="lg" [enabled]="firebase.authState | async">
+<ion-split-pane when="lg" [enabled]="!isOnPublicPage && firebase.authState | async">
   <ion-menu [content]="content" swipeEnabled="false">
     <ion-header>
       <ion-toolbar color="primary">

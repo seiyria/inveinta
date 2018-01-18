@@ -7,6 +7,7 @@ import { CollectionTypesHash } from '../../models/CollectionTypes';
 import * as Clipboard from 'clipboard';
 
 import * as _ from 'lodash';
+import { NotifierProvider } from '../../providers/notifier/notifier';
 
 @IonicPage({
   name: 'Collections',
@@ -25,7 +26,8 @@ export class AppCollectionsPage {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    public firebase: FirebaseProvider
+    public firebase: FirebaseProvider,
+    private notifier: NotifierProvider
   ) {}
 
   ionViewWillEnter() {
@@ -36,10 +38,7 @@ export class AppCollectionsPage {
     this.clipboard = new Clipboard('.copy-button');
 
     this.clipboard.on('success', () => {
-      this.toastCtrl.create({
-        duration: 3000,
-        message: 'Copied Share ID to clipboard!'
-      }).present();
+      this.notifier.toast('Copied Share ID to clipboard!');
     });
   }
 

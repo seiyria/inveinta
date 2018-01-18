@@ -28,30 +28,15 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   private uuid: string;
   private columns: CollectionAttr[] = [];
-  public displayColumns: CollectionAttr[] = [];
-  private hiddenColumns: CollectionAttr[] = [];
 
   private coll$: Subscription;
   private items$: Subscription;
 
   private allItems: Item[] = [];
-  public visibleItems: Item[] = [];
 
   public forceEditTypes: boolean;
   public selectedTypes: any = {};
   public typeSearchQuery = '';
-  public itemFilterQuery = '';
-
-  public get ngxDataTableIcons() {
-    return {
-      sortAscending: 'ion-md-arrow-dropup',
-      sortDescending: 'ion-md-arrow-dropdown',
-      pagerPrevious: 'ion-ios-arrow-dropleft-circle',
-      pagerNext: 'ion-ios-arrow-dropright-circle',
-      pagerLeftArrow: 'ion-ios-arrow-back',
-      pagerRightArrow: 'ion-ios-arrow-forward'
-    };
-  }
 
   public get myTypes(): CollectionType[] {
     return _.values(this.firebase.currentProfile.mixins || {});
@@ -63,10 +48,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
   public get hasSelectedTypes(): boolean {
     return Object.keys(this.selectedTypes).length > 0;
-  }
-
-  public get shouldExpand(): boolean {
-    return this.columns.length !== this.displayColumns.length;
   }
 
   constructor(
@@ -103,7 +84,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
 
     this.items$ = this.firebase.currentCollectionItems.subscribe(data => {
       this.allItems = data;
-      this.updateItemFilter();
     });
 
   }
@@ -111,22 +91,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     if(this.coll$) this.coll$.unsubscribe();
     if(this.items$) this.items$.unsubscribe();
-  }
-
-  public canItemExpand(item: Item): boolean {
-    return _.some(this.hiddenColumns, col => item[col.prop]);
-  }
-
-  public updateItemFilter() {
-    if(!this.itemFilterQuery) {
-      this.visibleItems = this.allItems;
-      return;
-    }
-
-    this.visibleItems = this.allItems.filter(item => {
-      if(!item.name) return false;
-      return item.name.toLowerCase().includes(this.itemFilterQuery.toLowerCase());
-    });
   }
 
   private updateCollectionTypeColumns(coll: ItemCollection) {
@@ -155,9 +119,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
       .value();
 
     this.columns.unshift({ name: 'Name', prop: 'name', type: 'string' });
-
-    this.displayColumns = _.reject(this.columns, prop => prop.hidden);
-    this.hiddenColumns  = _.filter(this.columns, prop => prop.hidden);
   }
 
   public selectType(id: string): void {
@@ -245,12 +206,6 @@ export class AppCollectionsDetailPage implements OnInit, OnDestroy {
     popover.present({
       ev: event
     });
-  }
-
-  public getComputeString(attr: CollectionAttr, item: Item) {
-    if(attr.computeString) return attr.computeString.split('{name}').join(encodeURIComponent(item.name));
-    if(attr.compute) return attr.compute(item);
-    return '';
   }
 
   public createMixin(mixin?: CollectionType) {

@@ -5,6 +5,10 @@ import { CollectionAttr } from '../../models/CollectionTypes';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { ShareCollectionModal } from './sharing.modal';
 
+import * as Clipboard from 'clipboard';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { NotifierProvider } from '../../providers/notifier/notifier';
+
 @Component({
   template: `
     <ion-list>
@@ -12,14 +16,28 @@ import { ShareCollectionModal } from './sharing.modal';
       <button ion-item (click)="editName()">Change Name</button>
       <button ion-item (click)="editTypes()">Change Mixins</button>
       <button ion-item (click)="openShare()">Share Collection</button>
+      <ion-item>
+        <ion-label>Public</ion-label>
+        <ion-toggle [(ngModel)]="collection.isPublic" (ionChange)="togglePublic()"></ion-toggle>
+      </ion-item>
+      <button ion-item color="secondary" 
+              *ngIf="collection.isPublic" 
+              [attr.data-clipboard-text]="publicURL"
+              class="copy-button">Get Public URL</button>
       <button ion-item color="danger" (click)="removeCollection()">Remove Collection</button>
     </ion-list>
   `
 })
-export class ModifyCollectionPopover implements OnInit {
+export class ModifyCollectionPopover implements OnInit, OnDestroy {
 
   public collection: ItemCollection;
   public columns: CollectionAttr[] = [];
+
+  private clipboard: Clipboard;
+
+  public get publicURL(): string {
+    return `${window.location.origin}/#/p/${this.collection.id}`;
+  }
 
   constructor(
     private navParams: NavParams,
@@ -27,12 +45,23 @@ export class ModifyCollectionPopover implements OnInit {
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
     private viewCtrl: ViewController,
-    private firebase: FirebaseProvider
+    private firebase: FirebaseProvider,
+    private notifier: NotifierProvider
   ) {}
 
   ngOnInit() {
     this.collection = this.navParams.get('collection');
     this.columns = this.navParams.get('columns');
+
+    this.clipboard = new Clipboard('.copy-button');
+
+    this.clipboard.on('success', () => {
+      this.notifier.toast('Copied public URL to clipboard!');
+    });
+  }
+
+  ngOnDestroy() {
+    if(this.clipboard) this.clipboard.destroy();
   }
 
   editName() {
@@ -61,6 +90,10 @@ export class ModifyCollectionPopover implements OnInit {
         }
       ]
     }).present();
+  }
+  
+  togglePublic() {
+    this.firebase.updateCollection(this.collection);
   }
 
   editTypes() {

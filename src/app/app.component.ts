@@ -18,6 +18,7 @@ export class MyApp {
   };
 
   public activePage: string;
+  public isOnPublicPage: boolean;
   rootPage: any = HomePage;
 
   pages: Array<{title: string, component: string, badge?: () => number }> = [
@@ -43,7 +44,10 @@ export class MyApp {
       this.splashScreen.hide();
 
       this.nav.viewWillEnter.subscribe((view) => {
-        const curPage = this.ctorToPage[view.instance.constructor.name];
+        const page = view.instance.constructor.name;
+        this.isOnPublicPage = page === 'AppPublicCollectionPage';
+
+        const curPage = this.ctorToPage[page];
         if(!curPage) return;
 
         this.activePage = curPage;

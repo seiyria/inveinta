@@ -64,7 +64,7 @@ import * as _ from 'lodash';
                         maxlength="5000"
                         placeholder="Enter a description (markdown supported)"></ion-textarea>
 
-          <ion-checkbox *ngIf="column.type === 'boolean'" [(ngModel)]="item[column.prop]"></ion-checkbox>
+          <ion-toggle *ngIf="column.type === 'boolean'" [(ngModel)]="item[column.prop]"></ion-toggle>
           
           <ion-row no-padding *ngIf="column.type === 'rating'">
             <ion-col no-padding col-2>

@@ -14,13 +14,15 @@ export class MyApp {
 
   private ctorToPage = {
     AppCollectionsPage: 'Collections',
-    ApppCollectionsDetailPage: 'Collections'
+    AppCollectionsDetailPage: 'Collections'
   };
 
   public activePage: string;
   rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: string, badge?: () => number }>;
+  pages: Array<{title: string, component: string, badge?: () => number }> = [
+    { title: 'Collections', component: 'Collections' }
+  ];
 
   constructor(
     public platform: Platform,
@@ -31,12 +33,6 @@ export class MyApp {
     public firebase: FirebaseProvider
   ) {
     this.initializeApp();
-
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Collections', component: 'Collections' }
-    ];
-
   }
 
   initializeApp() {
@@ -46,7 +42,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      this.nav.viewDidEnter.subscribe((view) => {
+      this.nav.viewWillEnter.subscribe((view) => {
         const curPage = this.ctorToPage[view.instance.constructor.name];
         if(!curPage) return;
 

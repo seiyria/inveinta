@@ -41,7 +41,6 @@ export class MyApp {
       this.splashScreen.hide();
 
       this.nav.viewWillEnter.subscribe((view) => {
-        const page = view;
         if(_.startsWith(view.id, 'collections/')) this.activePage = 'Collections';
         this.isOnPublicPage = _.startsWith(view.id, 'p/');
       });

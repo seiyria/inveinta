@@ -3,6 +3,7 @@ import { CollectionAttr } from '../../models/CollectionTypes';
 import { Item } from '../../models/Collection';
 
 import * as _ from 'lodash';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 @Component({
   selector: 'collection-table',
@@ -12,6 +13,9 @@ export class CollectionTableComponent {
 
   @Output()
   public tableContextMenu = new EventEmitter();
+
+  @Input()
+  public canInteract: boolean;
 
   @Input()
   public set allItems(items: Item[]) {
@@ -52,6 +56,8 @@ export class CollectionTableComponent {
   public itemFilterQuery: string = '';
   public visibleItems: Item[] = [];
 
+  public constructor(private firebase: FirebaseProvider) {}
+
   public getComputeString(attr: CollectionAttr, item: Item) {
     if(attr.computeString) return attr.computeString.split('{name}').join(encodeURIComponent(item.name));
     if(attr.compute) return attr.compute(item);
@@ -72,5 +78,9 @@ export class CollectionTableComponent {
       if(!item.name) return false;
       return item.name.toLowerCase().includes(this.itemFilterQuery.toLowerCase());
     });
+  }
+
+  public updateItemInline(item: Item) {
+    this.firebase.updateCollectionItem(item);
   }
 }

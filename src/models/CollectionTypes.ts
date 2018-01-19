@@ -1,7 +1,8 @@
 
 import { Item } from './Collection';
 
-type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'rating' | 'markdown' | 'imageURL' | 'computed';
+type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'inline-boolean'
+              | 'rating' | 'markdown' | 'imageURL' | 'computed';
 
 export class CollectionAttr {
   name: string;
@@ -23,7 +24,7 @@ export class CollectionAttr {
 const PRICE_ATTR: CollectionAttr =      { name: 'Price',    prop: 'price',      type: 'money' };
 
 const QTY_ATTR: CollectionAttr =        { name: 'Quantity', prop: 'quantity',   type: 'number' };
-const FORSALE_ATTR: CollectionAttr =    { name: 'For Sale', prop: 'forSale',    type: 'boolean' };
+const FORSALE_ATTR: CollectionAttr =    { name: 'For Sale', prop: 'forSale',    type: 'inline-boolean' };
 
 const BGG_ATTR: CollectionAttr =        { name: 'BoardGameGeek', prop: 'bggLink', type: 'computed',
     computeDisplayString: 'BGG Search',

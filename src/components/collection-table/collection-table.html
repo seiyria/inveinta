@@ -82,6 +82,24 @@
             </span>
           </div>
 
+        <div *ngSwitchCase="'inline-boolean'">
+          <ion-toggle *ngIf="canInteract"
+                      class="inline-toggle"
+                      mode="ios"
+                      (ionChange)="updateItemInline(row)"
+                      [(ngModel)]="row[column.prop]"></ion-toggle>
+
+          <!-- revert to a plain boolean display if we can't interact with the toggle -->
+          <div *ngIf="!canInteract">
+            <span *ngIf="row[column.prop]">
+              <ion-icon name="checkmark-circle"></ion-icon> &nbsp;Yes
+            </span>
+            <span *ngIf="!row[column.prop]">
+              <ion-icon name="close-circle"></ion-icon> &nbsp;No
+            </span>
+          </div>
+        </div>
+
           <div *ngSwitchDefault>{{ row[column.prop] }}</div>
       </div>
     </ng-template>

@@ -141,6 +141,7 @@ export class AddMixinModal implements OnInit {
     { name: 'Money',      type: 'money' },
     { name: 'Number',     type: 'number' },
     { name: 'Yes/No',     type: 'boolean' },
+    { name: 'Checkbox',   type: 'inline-boolean' },
     { name: 'Choice',     type: 'choice' },
     { name: 'Rating',     type: 'rating' },
     { name: 'Long Text',  type: 'markdown', forceProp: 'descriptionMD', hidden: true },

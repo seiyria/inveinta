@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavParams } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { Item, ItemCollection } from '../../models/Collection';
 import { CollectionTypesHash, CollectionAttr } from '../../models/CollectionTypes';

@@ -1,6 +1,6 @@
 
 <ion-header>
-  
+
   <ion-navbar color="primary">
     <ion-title>{{ collection ? collection.name : 'Public Collection' }}</ion-title>
   </ion-navbar>
@@ -16,5 +16,8 @@
     Either this collection does not exist or isn't public.
   </h3>
 
-  <collection-table *ngIf="!privacyError && allItems.length > 0" [allItems]="allItems" [allColumns]="columns"></collection-table>
+  <collection-table *ngIf="!privacyError && allItems.length > 0"
+                    [canInteract]="false"
+                    [allItems]="allItems"
+                    [allColumns]="columns"></collection-table>
 </ion-content>

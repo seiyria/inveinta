@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, LoadingController, NavController, ToastController } from 'ionic-angular';
+import { AlertController, IonicPage, LoadingController, NavController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
 import { ItemCollection } from '../../models/Collection';
 import { CollectionTypesHash } from '../../models/CollectionTypes';
@@ -25,7 +25,6 @@ export class AppCollectionsPage {
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
     public firebase: FirebaseProvider,
     private notifier: NotifierProvider
   ) {}

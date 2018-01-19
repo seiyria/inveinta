@@ -107,7 +107,8 @@
     </div>
 
     <div *ngIf="hasTypes(coll) && !forceEditTypes">
-      <collection-table [allItems]="allItems" 
+      <collection-table [canInteract]="true"
+                        [allItems]="allItems"
                         [allColumns]="columns"
                         (tableContextMenu)="onTableContextMenu($event, coll)"></collection-table>
     </div>

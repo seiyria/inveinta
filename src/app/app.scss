@@ -104,3 +104,11 @@ ion-list, ion-list-header {
 ion-fab {
   position: fixed;
 }
+
+ion-toggle.toggle-ios.inline-toggle {
+  .toggle-inner {
+    height: 17px !important;
+  }
+
+  height: 21px !important;
+}

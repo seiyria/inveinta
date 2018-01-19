@@ -4,6 +4,8 @@ import { Item } from '../../models/Collection';
 
 import * as _ from 'lodash';
 import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { AlertController } from 'ionic-angular';
+import { NotifierProvider } from '../../providers/notifier/notifier';
 
 @Component({
   selector: 'collection-table',
@@ -56,7 +58,11 @@ export class CollectionTableComponent {
   public itemFilterQuery: string = '';
   public visibleItems: Item[] = [];
 
-  public constructor(private firebase: FirebaseProvider) {}
+  public constructor(
+    private firebase: FirebaseProvider,
+    private notifier: NotifierProvider,
+    private alertCtrl: AlertController
+  ) {}
 
   public getComputeString(attr: CollectionAttr, item: Item) {
     if(attr.computeString) return attr.computeString.split('{name}').join(encodeURIComponent(item.name));
@@ -80,7 +86,55 @@ export class CollectionTableComponent {
     });
   }
 
+  public getCellClass(column): () => string {
+    return () => ` column-type-${column.type} ${this.canInteract ? 'can-interact' : 'no-interact'}`;
+  }
+
   public updateItemInline(item: Item) {
     this.firebase.updateCollectionItem(item);
+  }
+
+  public checkout(item: Item, prop: string): void {
+    this.alertCtrl.create({
+      title: `Check out "${item.name}"`,
+      subTitle: `Who do you want to check "${item.name}" out to?`,
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'Checked out to'
+        }
+      ],
+      buttons: [
+        'Cancel',
+        {
+          text: 'Check Out',
+          handler: ({ name }) => {
+            name = name.trim();
+            if(!name) return;
+            item[prop] = name;
+            this.firebase.updateCollectionItem(item);
+            this.notifier.toast(`Successfully checked "${item.name}" out to ${name}!`);
+          }
+        }
+      ]
+    }).present();
+  }
+
+  public checkin(item: Item, prop: string): void {
+    this.alertCtrl.create({
+      title: `Check in "${item.name}"`,
+      subTitle: `Are you sure you want to check in "${item.name}"?`,
+      buttons: [
+        'No, Not Yet',
+        {
+          text: 'Yes, Check In',
+          handler: () => {
+            delete item[prop];
+            this.firebase.updateCollectionItem(item);
+            this.notifier.toast(`Successfully checked "${item.name}" back in!`);
+          }
+        }
+      ]
+    }).present();
   }
 }

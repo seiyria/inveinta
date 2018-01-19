@@ -4,4 +4,27 @@ collection-table {
     display: inline-block;
     width: 20px !important;
   }
+
+  ion-toggle.toggle-ios.inline-toggle {
+    .toggle-inner {
+      height: 17px !important;
+    }
+
+    height: 21px !important;
+  }
+
+  .column-type-checkout.can-interact {
+    padding: 0 !important;
+  }
+
+  .inline-button {
+    &.button-md {
+      height: 3.2rem !important;
+      width: 107px !important;
+    }
+    &.button-ios {
+      height: 2em !important;
+      width: 107px !important;
+    }
+  }
 }

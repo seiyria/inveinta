@@ -31,7 +31,7 @@ import * as _ from 'lodash';
 
     <ion-content padding>
       <ion-list>
-        <ion-item *ngFor="let column of columns" [class.hidden]="column.type === 'computed'">
+        <ion-item *ngFor="let column of columns" [class.hidden]="shouldHideColumn(column)">
           
           <ion-label *ngIf="!isSpecialColumn(column) && shouldStackLabel(column)" stacked> {{ column.name }}</ion-label>
           <ion-label *ngIf="!isSpecialColumn(column) && !shouldStackLabel(column)">{{ column.name }}</ion-label>
@@ -115,11 +115,15 @@ export class AddItemModal implements OnInit {
     }
   }
 
-  isSpecialColumn(attr: CollectionAttr) {
-    return attr.type === 'rating';
+  public shouldHideColumn(attr: CollectionAttr): boolean {
+    return _.includes(['computed', 'checkout'], attr.type);
   }
 
-  shouldStackLabel(attr: CollectionAttr) {
+  isSpecialColumn(attr: CollectionAttr): boolean {
+    return _.includes(['rating'], attr.type);
+  }
+
+  shouldStackLabel(attr: CollectionAttr): boolean {
     return !_.includes(['choice', 'boolean'], attr.type);
   }
 

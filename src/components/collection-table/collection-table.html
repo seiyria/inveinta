@@ -58,29 +58,30 @@
   <ngx-datatable-column
     *ngFor="let column of displayColumns"
     [sortable]="!column.compute && !column.computeString"
+    [cellClass]="getCellClass(column)"
     [name]="column.name">
 
     <ng-template let-row="row" ngx-datatable-cell-template>
       <div [ngSwitch]="column.type">
 
-          <div *ngSwitchCase="'computed'">
-            <a [href]="getComputeString(column, row)" target="_blank">
-              {{ column.computeDisplayString || column.computeDisplay(row) }}
-            </a>
-          </div>
+        <div *ngSwitchCase="'computed'">
+          <a [href]="getComputeString(column, row)" target="_blank">
+            {{ column.computeDisplayString || column.computeDisplay(row) }}
+          </a>
+        </div>
 
-          <div *ngSwitchCase="'number'">
-            {{ row[column.prop] || 0 | number }}
-          </div>
+        <div *ngSwitchCase="'number'">
+          {{ row[column.prop] || 0 | number }}
+        </div>
 
-          <div *ngSwitchCase="'boolean'">
-            <span *ngIf="row[column.prop]">
-              <ion-icon name="checkmark-circle"></ion-icon> &nbsp;Yes
-            </span>
-            <span *ngIf="!row[column.prop]">
-              <ion-icon name="close-circle"></ion-icon> &nbsp;No
-            </span>
-          </div>
+        <div *ngSwitchCase="'boolean'">
+          <span *ngIf="row[column.prop]">
+            <ion-icon name="checkmark-circle"></ion-icon> &nbsp;Yes
+          </span>
+          <span *ngIf="!row[column.prop]">
+            <ion-icon name="close-circle"></ion-icon> &nbsp;No
+          </span>
+        </div>
 
         <div *ngSwitchCase="'inline-boolean'">
           <ion-toggle *ngIf="canInteract"
@@ -100,7 +101,25 @@
           </div>
         </div>
 
-          <div *ngSwitchDefault>{{ row[column.prop] }}</div>
+        <div *ngSwitchCase="'checkout'">
+          <span *ngIf="canInteract">
+            <button ion-button color="primary"
+                    *ngIf="!row[column.prop]"
+                    class="inline-button"
+                    mode="ios"
+                    (click)="checkout(row, column.prop)">Check Out</button>
+
+            <button ion-button color="secondary"
+                    *ngIf="row[column.prop]"
+                    class="inline-button"
+                    mode="ios"
+                    (click)="checkin(row, column.prop)">Check In</button>
+          </span>
+
+          {{ row[column.prop] }}
+        </div>
+
+        <div *ngSwitchDefault>{{ row[column.prop] }}</div>
       </div>
     </ng-template>
   </ngx-datatable-column>

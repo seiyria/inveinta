@@ -2,7 +2,7 @@
 import { Item } from './Collection';
 
 type AttrType = 'string' | 'money' | 'number' | 'boolean' | 'choice' | 'inline-boolean'
-              | 'rating' | 'markdown' | 'imageURL' | 'computed';
+              | 'rating' | 'markdown' | 'imageURL' | 'checkout' | 'computed';
 
 export class CollectionAttr {
   name: string;
@@ -66,6 +66,8 @@ const MARKDOWN_ATTR: CollectionAttr =   { name: 'Description', prop: 'descriptio
 const COOK_TIME_ATTR: CollectionAttr =    { name: 'Cook Time', prop: 'cookTime', type: 'string' };
 const IMAGE_ATTR: CollectionAttr =   { name: 'Image URL', prop: 'imageURL', type: 'imageURL', hidden: true };
 
+const CHECKOUT_ATTR: CollectionAttr = { name: 'Checkout Status', prop: 'checkedOutBy', type: 'checkout' };
+
 export const RATING_DISPLAY_HELPER = (item) => {
   item['ratingValue'] = item['ratingValue'] || 0;
 
@@ -123,6 +125,14 @@ export const CollectionTypes: CollectionType[] = [
       GAMESYSTEM_ATTR,
       HLTB_ATTR,
       GFAQ_ATTR
+    ]
+  },
+  {
+    name: 'Library',
+    id: 'LIBRARY',
+    desc: 'A mixing for library-type collections. Adds checkout functionality to your collection.',
+    props: [
+      CHECKOUT_ATTR
     ]
   },
   {
